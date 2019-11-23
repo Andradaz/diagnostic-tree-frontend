@@ -7,7 +7,8 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-scripts": "3.2.0",
-    "typescript": "^3.3.4000"
+    "typescript": "^3.3.4000",
+    "vis-network": "^6.4.4"
   },
   "scripts": {
     "start": "react-scripts start",
