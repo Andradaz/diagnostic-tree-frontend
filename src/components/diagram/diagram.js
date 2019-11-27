@@ -49,7 +49,7 @@ function handleModelChange(changes) {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve('resolved');
-        }, 2000);
+        }, 1000);
       });
     }
 
