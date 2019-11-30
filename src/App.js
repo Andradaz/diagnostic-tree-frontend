@@ -3,6 +3,7 @@ import './App.css'
 import { useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import Grid from '@material-ui/core/Grid'
+import SwipeableTemporaryDrawer from '././components/swipeableTemporaryDrawer/swipeableTemporaryDrawer'
 
 function NavBar(){
   const theme = useTheme();
@@ -12,7 +13,7 @@ function NavBar(){
     );
   }else{
     return(
-      <div>Aici va fi meniul pentru ecrane mici</div>
+      <SwipeableTemporaryDrawer/>
     )
   }
 }
@@ -41,12 +42,12 @@ function Content(){
 
 function App() {
   return (
-    <Grid container spacing = {1}>
-      <Grid item xs={12}>
-        <NavBar/>
+      <Grid container spacing = {1}>
+        <Grid item xs={12}>
+          <NavBar/>
+        </Grid>
+        <Content/>
       </Grid>
-      <Content/>
-    </Grid>
   );
 }
 
