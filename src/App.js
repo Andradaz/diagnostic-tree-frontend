@@ -9,8 +9,7 @@ import Container from '@material-ui/core/Container'
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom"
 import Admin from './components/admin/admin'
 import About from './components/about/about'
