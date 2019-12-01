@@ -5,6 +5,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
+import {
+    Link
+  } from "react-router-dom"
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -13,14 +16,16 @@ const useStyles = makeStyles(theme => ({
     }
   }));
 
+
+
 function Menu(){
     const classes = useStyles();
     return(
             <Paper square className={classes.paper}>
                 <Grid container>
                         <Grid item container xs = {2} justify='center' alignItems='center'>
-                            <Button color="primary">
-                                    <Typography>
+                            <Button href = '/diagnostic' color="primary">
+                                    <Typography component={'span'}>
                                         <Box fontWeight="fontWeightRegular" m={1}>
                                             Diagnostic
                                         </Box>
@@ -28,8 +33,8 @@ function Menu(){
                             </Button>
                         </Grid>
                         <Grid item container xs = {2} justify='center'>
-                            <Button color="primary">
-                                <Typography>
+                            <Button href = '/' color="primary">
+                                <Typography component={'span'}>
                                         <Box fontWeight="fontWeightRegular" m={1}>
                                             Despre
                                         </Box>
@@ -38,8 +43,8 @@ function Menu(){
                         </Grid>
                         <Grid item container xs = {8} justify='flex-end'>
                             <Grid item container xs = {2} justify='center'>
-                                <Button color="primary">
-                                    <Typography>
+                                <Button href = '/admin' color="primary">
+                                    <Typography component={'span'}>
                                         <Box fontWeight="fontWeightRegular" m={1}>
                                             Admin
                                         </Box>

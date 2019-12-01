@@ -6,6 +6,15 @@ import Grid from '@material-ui/core/Grid'
 import SwipeableTemporaryDrawer from '././components/swipeableTemporaryDrawer/swipeableTemporaryDrawer'
 import Menu from './components/menu/menu'
 import Container from '@material-ui/core/Container'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom"
+import Admin from './components/admin/admin'
+import About from './components/about/about'
+import Diagnostic from './components/diagnostic/diagnostic'
 
 function NavBar(){
   const theme = useTheme();
@@ -24,14 +33,17 @@ function Content(){
   const theme = useTheme();
   if(useMediaQuery(theme.breakpoints.up('md'))){
     return(
-          <Grid container>
-            <Grid item md = {3}>
-                  aici este meniul de arbori
-            </Grid>
-            <Grid item md = {9}>
-                  aici va fi continutul
-            </Grid>
-        </Grid>
+      <Switch>
+        <Route path="/admin">
+            <Admin />
+        </Route>
+        <Route path="/diagnostic">
+            <Diagnostic />
+        </Route>
+        <Route path="/">
+            <About />
+        </Route>
+    </Switch>
       
       
     );
@@ -46,6 +58,8 @@ function Content(){
 
 function App() {
   return (
+    <Router>
+
       <Grid container spacing = {1}>
         <Grid item xs={12}>
           <NavBar/>
@@ -54,6 +68,7 @@ function App() {
           <Content/>
         </Container>
       </Grid>
+    </Router>
   );
 }
 
