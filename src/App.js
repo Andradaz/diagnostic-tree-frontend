@@ -4,12 +4,14 @@ import { useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import Grid from '@material-ui/core/Grid'
 import SwipeableTemporaryDrawer from '././components/swipeableTemporaryDrawer/swipeableTemporaryDrawer'
+import Menu from './components/menu/menu'
+import Container from '@material-ui/core/Container'
 
 function NavBar(){
   const theme = useTheme();
   if(useMediaQuery(theme.breakpoints.up('md'))){
     return(
-      <div> Aici va fi meniul pentru ecrane mari.</div>
+      <Menu/>
     );
   }else{
     return(
@@ -22,14 +24,16 @@ function Content(){
   const theme = useTheme();
   if(useMediaQuery(theme.breakpoints.up('md'))){
     return(
-      <Grid container>
-        <Grid item md = {3}>
-              aici este meniul de arbori
+          <Grid container>
+            <Grid item md = {3}>
+                  aici este meniul de arbori
+            </Grid>
+            <Grid item md = {9}>
+                  aici va fi continutul
+            </Grid>
         </Grid>
-        <Grid item md = {9}>
-              aici va fi continutul
-        </Grid>
-      </Grid>
+      
+      
     );
   }else{
     return(
@@ -46,9 +50,11 @@ function App() {
         <Grid item xs={12}>
           <NavBar/>
         </Grid>
-        <Content/>
+        <Container>
+          <Content/>
+        </Container>
       </Grid>
   );
 }
 
-export default App;
+export default App
