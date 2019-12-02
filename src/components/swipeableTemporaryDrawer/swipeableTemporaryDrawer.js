@@ -8,13 +8,15 @@ import Divider from '@material-ui/core/Divider'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
-import MailIcon from  '@material-ui/icons/Mail'
 import ListIcon from '@material-ui/icons/List'
 import IconButton from '@material-ui/core/IconButton'
 import HomeIcon from '@material-ui/icons/Home'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import Paper from '@material-ui/core/Paper'
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
+import { Link as RouterLink } from 'react-router-dom'
+
+const Link1 = React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />);
 
 const useStyles = makeStyles({
     list: {
@@ -46,18 +48,18 @@ function SwipeableTemporaryDrawer(){
           onKeyDown={toggleDrawer(side, false)}
         >
           <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
+            {[{nume: 'Sindrom metabolic', link: '/diagnostic'},{nume: 'Diabet de tip II ', link: '/admin'} ].map((obj, index) => (
+              <ListItem button component={Link1} to = {obj.link} key={obj.nume}>
+                <ListItemIcon><ArrowForwardIosIcon/></ListItemIcon>
+                <ListItemText primary={obj.nume} />
               </ListItem>
             ))}
           </List>
           <Divider />
           <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
+            {['Admin Only', 'Admin Only1', 'Admin Only3'].map((text, index) => (
               <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemIcon><ArrowForwardIosIcon/></ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
             ))}
@@ -74,12 +76,12 @@ function SwipeableTemporaryDrawer(){
               </IconButton>
           </Grid>
           <Grid item container xs = {4} justify='center'>
-              <IconButton>
+              <IconButton href = '/'>
                 <HomeIcon color = 'primary'/>
               </IconButton>
           </Grid>
           <Grid item container xs = {4} justify='center'>
-              <IconButton>
+              <IconButton href = '/admin'>
                 <AccountCircleIcon color = 'primary'/>
               </IconButton>
           </Grid>

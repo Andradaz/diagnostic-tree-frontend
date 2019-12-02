@@ -28,43 +28,25 @@ function NavBar(){
   }
 }
 
-function Content(){
-  const theme = useTheme();
-  if(useMediaQuery(theme.breakpoints.up('md'))){
-    return(
-      <Switch>
-        <Route path="/admin">
-            <Admin />
-        </Route>
-        <Route path="/diagnostic">
-            <Diagnostic />
-        </Route>
-        <Route path="/">
-            <About />
-        </Route>
-    </Switch>
-      
-      
-    );
-  }else{
-    return(
-      <Grid container>
-        aici va fi continutul
-      </Grid>
-    );
-  }
-}
-
 function App() {
   return (
     <Router>
-
       <Grid container spacing = {1}>
         <Grid item xs={12}>
           <NavBar/>
         </Grid>
         <Container>
-          <Content/>
+          <Switch>
+            <Route path="/admin">
+                <Admin />
+            </Route>
+            <Route path="/diagnostic">
+                <Diagnostic />
+            </Route>
+            <Route path="/">
+                <About />
+            </Route>
+          </Switch>
         </Container>
       </Grid>
     </Router>
