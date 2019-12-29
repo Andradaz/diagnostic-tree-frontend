@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './swipeableTemporaryDrawer.css'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
@@ -15,86 +15,100 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import Paper from '@material-ui/core/Paper'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { Link as RouterLink } from 'react-router-dom'
+import axios from "axios"
+import GetDiagram from '../../services/read_diagram'
 
 const Link1 = React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />);
 
 const useStyles = makeStyles({
-    list: {
-      width: 250,
-    }
+  list: {
+    width: 250,
+  }
+});
+
+function SwipeableTemporaryDrawer() {
+  const classes = useStyles();
+
+  const [state, setState] = React.useState({
+    left: false,
+    right: false,
   });
 
-function SwipeableTemporaryDrawer(){
-    const classes = useStyles();
+  useEffect(() => {
+    async function fetchData() {
+      console.log("Astept promisiunea")
+      // const result = await axios(
+      //   'http://localhost:3000/diagram/5e07afe6dc3e960a7cfd5304',
+      // );
+      const result = await GetDiagram
+      console.log(result.data)
+    }
+    fetchData();
+  }, []);
 
-    const [state, setState] = React.useState({
-        left: false,
-        right: false,
-      });
-    
-      const toggleDrawer = (side, open) => event => {
-        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-          return;
-        }
-    
-        setState({ ...state, [side]: open });
-      };
+  const toggleDrawer = (side, open) => event => {
+    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
 
-    const sideList = side => (
-        <div
-          className={classes.list}
-          role="presentation"
-          onClick={toggleDrawer(side, false)}
-          onKeyDown={toggleDrawer(side, false)}
-        >
-          <List>
-            {[{nume: 'Sindrom metabolic', link: '/diagnostic'},{nume: 'Diabet de tip II ', link: '/admin'} ].map((obj, index) => (
-              <ListItem button component={Link1} to = {obj.link} key={obj.nume}>
-                <ListItemIcon><ArrowForwardIosIcon/></ListItemIcon>
-                <ListItemText primary={obj.nume} />
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {['Admin Only', 'Admin Only1', 'Admin Only3'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon><ArrowForwardIosIcon/></ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-        </div>
-      );
-    
-    return(
-      <Paper square elevation={1}>
-        <Grid container spacing={0} >
-          <Grid item container xs = {4} justify='center'>
-              <IconButton  onClick={toggleDrawer('left', true)}>
-                <ListIcon color = 'primary'/>
-              </IconButton>
-          </Grid>
-          <Grid item container xs = {4} justify='center'>
-              <IconButton href = '/'>
-                <HomeIcon color = 'primary'/>
-              </IconButton>
-          </Grid>
-          <Grid item container xs = {4} justify='center'>
-              <IconButton href = '/admin'>
-                <AccountCircleIcon color = 'primary'/>
-              </IconButton>
-          </Grid>
-            <SwipeableDrawer
-                open={state.left}
-                onClose={toggleDrawer('left', false)}
-                onOpen={toggleDrawer('left', true)}
-            >
-            {sideList('left')}
-            </SwipeableDrawer>
+    setState({ ...state, [side]: open });
+  };
+
+  const sideList = side => (
+    <div
+      className={classes.list}
+      role="presentation"
+      onClick={toggleDrawer(side, false)}
+      onKeyDown={toggleDrawer(side, false)}
+    >
+      <List>
+        {[{ nume: 'Sindrom metabolic', link: '/diagnostic' }, { nume: 'Diabet de tip II ', link: '/admin' }].map((obj, index) => (
+          <ListItem button component={Link1} to={obj.link} key={obj.nume}>
+            <ListItemIcon><ArrowForwardIosIcon /></ListItemIcon>
+            <ListItemText primary={obj.nume} />
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {['Admin Only', 'Admin Only1', 'Admin Only3'].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon><ArrowForwardIosIcon /></ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
+
+  return (
+    <Paper square elevation={1}>
+      <Grid container spacing={0} >
+        <Grid item container xs={4} justify='center'>
+          <IconButton onClick={toggleDrawer('left', true)}>
+            <ListIcon color='primary' />
+          </IconButton>
         </Grid>
-        </Paper>
-    );
+        <Grid item container xs={4} justify='center'>
+          <IconButton href='/'>
+            <HomeIcon color='primary' />
+          </IconButton>
+        </Grid>
+        <Grid item container xs={4} justify='center'>
+          <IconButton href='/admin'>
+            <AccountCircleIcon color='primary' />
+          </IconButton>
+        </Grid>
+        <SwipeableDrawer
+          open={state.left}
+          onClose={toggleDrawer('left', false)}
+          onOpen={toggleDrawer('left', true)}
+        >
+          {sideList('left')}
+        </SwipeableDrawer>
+      </Grid>
+    </Paper>
+  );
 }
 
 export default SwipeableTemporaryDrawer
