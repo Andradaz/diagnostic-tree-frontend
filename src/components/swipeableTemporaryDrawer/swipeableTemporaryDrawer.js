@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import './swipeableTemporaryDrawer.css'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
@@ -15,8 +15,6 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import Paper from '@material-ui/core/Paper'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { Link as RouterLink } from 'react-router-dom'
-import axios from "axios"
-import GetDiagram from '../../services/read_diagram'
 
 const Link1 = React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />);
 
@@ -26,25 +24,14 @@ const useStyles = makeStyles({
   }
 });
 
-function SwipeableTemporaryDrawer() {
+function SwipeableTemporaryDrawer(props) {
+  
   const classes = useStyles();
 
   const [state, setState] = React.useState({
     left: false,
-    right: false,
+    right: false
   });
-
-  useEffect(() => {
-    async function fetchData() {
-      console.log("Astept promisiunea")
-      // const result = await axios(
-      //   'http://localhost:3000/diagram/5e07afe6dc3e960a7cfd5304',
-      // );
-      const result = await GetDiagram
-      console.log(result.data)
-    }
-    fetchData();
-  }, []);
 
   const toggleDrawer = (side, open) => event => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -62,10 +49,10 @@ function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(side, false)}
     >
       <List>
-        {[{ nume: 'Sindrom metabolic', link: '/diagnostic' }, { nume: 'Diabet de tip II ', link: '/admin' }].map((obj, index) => (
-          <ListItem button component={Link1} to={obj.link} key={obj.nume}>
+        {props.list.map((obj, index) => (
+          <ListItem button component={Link1} to={obj.link} key={obj._id}>
             <ListItemIcon><ArrowForwardIosIcon /></ListItemIcon>
-            <ListItemText primary={obj.nume} />
+            <ListItemText primary={obj.name} />
           </ListItem>
         ))}
       </List>
