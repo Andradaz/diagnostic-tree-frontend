@@ -7,10 +7,16 @@ import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        backgroundColor: "#282b2b"
+    },
     paper: {
       height: 55,
-      width: '100%'
-    }
+      width: '100%',
+    },
+    button: {
+        textTransform: "none"
+      }
   }));
 
 
@@ -18,10 +24,12 @@ const useStyles = makeStyles(theme => ({
 function Menu(){
     const classes = useStyles();
     return(
-            <Paper square className={classes.paper}>
+            <Paper square classes={{
+                root: classes.root
+              }} elevation={0}>
                 <Grid container>
                         <Grid item container xs = {2} justify='center' alignItems='center'>
-                            <Button href = '/diagnostic' color="primary">
+                            <Button href = '/diagnostic' color="primary" className={classes.button}>
                                     <Typography component={'span'}>
                                         <Box fontWeight="fontWeightRegular" m={1}>
                                             Diagnostic
@@ -30,17 +38,17 @@ function Menu(){
                             </Button>
                         </Grid>
                         <Grid item container xs = {2} justify='center'>
-                            <Button href = '/' color="primary">
+                            <Button href = '/' color="primary" className={classes.button}>
                                 <Typography component={'span'}>
                                         <Box fontWeight="fontWeightRegular" m={1}>
                                             Despre
                                         </Box>
-                                    </Typography>
+                                </Typography>
                             </Button>
                         </Grid>
                         <Grid item container xs = {8} justify='flex-end'>
-                            <Grid item container xs = {2} justify='center'>
-                                <Button href = '/admin' color="primary">
+                            <Grid item container xs = {3} justify='center'>
+                                <Button href = '/admin' color="primary" className={classes.button}>
                                     <Typography component={'span'}>
                                         <Box fontWeight="fontWeightRegular" m={1}>
                                             Admin

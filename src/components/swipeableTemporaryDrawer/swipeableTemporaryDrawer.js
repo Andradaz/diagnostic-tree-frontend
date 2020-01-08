@@ -21,6 +21,9 @@ const Link1 = React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...pr
 const useStyles = makeStyles({
   list: {
     width: 250,
+  },
+  root: {
+    backgroundColor: "#282b2b"
   }
 });
 
@@ -69,7 +72,8 @@ function SwipeableTemporaryDrawer(props) {
   );
 
   return (
-    <Paper square elevation={1}>
+    <Paper square elevation={1} classes={{
+      root: classes.root}}>
       <Grid container spacing={0} >
         <Grid item container xs={4} justify='center'>
           <IconButton onClick={toggleDrawer('left', true)}>

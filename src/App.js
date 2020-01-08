@@ -5,7 +5,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import Grid from '@material-ui/core/Grid'
 import SwipeableTemporaryDrawer from '././components/swipeableTemporaryDrawer/swipeableTemporaryDrawer'
 import Menu from './components/menu/menu'
-import Container from '@material-ui/core/Container'
 import {
   BrowserRouter as Router,
   Switch,
@@ -50,19 +49,19 @@ class App extends React.Component {
           <Grid item xs={12}>
             <NavBar list = {this.state.list} />
           </Grid>
-          <Container>
+          <Grid item xs ={12}>
             <Switch>
               <Route path="/admin">
                 <Admin />
               </Route>
               <Route path="/diagnostic">
-                <Diagnostic />
+                <Diagnostic list = {this.state.list}/>
               </Route>
               <Route path="/">
                 <About />
               </Route>
             </Switch>
-          </Container>
+          </Grid>
         </Grid>
       </Router>
     );

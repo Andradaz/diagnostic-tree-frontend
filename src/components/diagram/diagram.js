@@ -53,7 +53,10 @@ function handleModelChange(changes) {
       });
     }
 
-function Diagram(){
+
+    
+function Diagram(props){
+  console.log("Trebuie sa randez: " + props.content + " si sa nu uit sa pun un if de verificare daca e undefined")
    const nodesColors = [{id: 0 , color: "#c0cacf", linkColor: "#c0cacf"},
                          {id: 1 , color: "#c0cacf", linkColor: "#c0cacf"},
                          {id: 2 , color: "#c0cacf", linkColor: "#c0cacf"},
@@ -117,6 +120,7 @@ function Diagram(){
        ])
       
     }
+
     return(
         <div>
         <Button variant="outlined" color="primary" onClick={handleClick}>
@@ -152,6 +156,7 @@ function Diagram(){
           // ]}
           //onModelChange={handleModelChange}
         />
+
         </div>
     );
 }
