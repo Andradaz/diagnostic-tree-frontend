@@ -4,12 +4,13 @@ import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import 'typeface-roboto'
 
 const theme = createMuiTheme({
     palette: {
         primary: { main: '#b1f2e5' },
-        secondary: { main: '#11cb5f' },
-         action: { selected: '#b1f2e5',
+        secondary: { main: '#41d0b3' },
+        action: { selected: '#b1f2e5',
                    hover: '#dcf2ee'},
       },
       typography: { useNextVariants: true }

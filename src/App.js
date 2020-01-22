@@ -14,32 +14,36 @@ import Admin from './components/admin/admin'
 import About from './components/about/about'
 import Diagnostic from './components/diagnostic/diagnostic'
 import GetList from '../src/services/get_list'
+import GetByName from '../src/services/get_by_name'
+import Create from '../src/components/create/create'
 
-function NavBar(props){
-    const theme = useTheme();
-    if(useMediaQuery(theme.breakpoints.up('md'))){
-      return(
-        <Menu/>
-      );
-    }else{
-      return(
-        <SwipeableTemporaryDrawer list = {typeof props.list.data == 'undefined' ? [] : props.list.data}/>
-      )
-    }
+function NavBar(props) {
+  const theme = useTheme();
+  if (useMediaQuery(theme.breakpoints.up('md'))) {
+    return (
+      <Menu />
+    );
+  } else {
+    return (
+      <SwipeableTemporaryDrawer list={typeof props.list.data == 'undefined' ? [] : props.list.data} />
+    )
   }
+}
 
 class App extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props)
-    this.state = {list: []}
+    this.state = { list: [] }
   }
 
   async fetchData() {
     const result = await GetList
-    this.list = this.setState({list: result});
+    this.list = this.setState({ list: result });
+    const representation = await GetByName({ name: "Diabet de tip II" })
+    console.log(representation)
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.fetchData();
   }
   render() {
@@ -47,15 +51,21 @@ class App extends React.Component {
       <Router>
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <NavBar list = {this.state.list} />
+            <NavBar list={this.state.list} />
           </Grid>
-          <Grid item xs ={12}>
+          <Grid item xs={12}>
             <Switch>
+              <Route path="/admin/create">
+                <Create />
+              </Route>
               <Route path="/admin">
                 <Admin />
               </Route>
               <Route path="/diagnostic">
-                <Diagnostic list = {this.state.list}/>
+                <Diagnostic list={this.state.list} />
+              </Route>
+              <Route path="/about">
+                <About />
               </Route>
               <Route path="/">
                 <About />

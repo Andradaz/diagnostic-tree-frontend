@@ -3,6 +3,18 @@ import * as go from 'gojs'
 import { ReactDiagram } from 'gojs-react'
 import { Button } from '@material-ui/core';
 import '../diagram/diagram.css'
+import Fab from '@material-ui/core/Fab'
+import PlayArrow from '@material-ui/icons/PlayArrow'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles(theme => ({
+  fab: {
+    position: 'absolute',
+    bottom: theme.spacing(3),
+    right: theme.spacing(3),
+  }
+}));
+
 function initDiagram() {
     const $ = go.GraphObject.make
     const diagram =
@@ -120,7 +132,7 @@ function Diagram(props){
        ])
       
     }
-
+    const classes = useStyles();
     return(
         <div>
         <Button variant="outlined" color="primary" onClick={handleClick}>
@@ -132,12 +144,12 @@ function Diagram(props){
           nodeDataArray={
               [
                 { key: 0,              name: "Glicemia a Jeune \n și/sau \n Hb A1c", color: colors[0].color, linkColor: colors[0].linkColor },
-                { key: 1, parent: "0", name: "Glicemia <= 101 mg/dl \n și/sau \n Hb A1c < 5.5 %", color: colors[1].color, linkColor: colors[1].linkColor },
-                { key: 2, parent: "0", name: "Glicemia între 102-108 mg/dl \n și/sau \n Hb A1c între 5.6 - 5.9%", color: colors[2].color, linkColor: colors[2].linkColor},
-                { key: 3, parent: "0", name: "Glicemia între 109-125 mg/dl \n și/sau \n Hb A1c între 6.0 - 6.4%", color: colors[3].color, linkColor: colors[3].linkColor},
-                { key: 4, parent: "0", name: "Glicemia > 106 mg/dl \n și/sau Hb \n A1c >6.5%", color: colors[4].color, linkColor: colors[4].linkColor},
-                { key: 5, parent: "2", name: "Fără factori de risc", color: colors[5].color, linkColor: colors[5].linkColor},
-                { key: 6, parent: "2", name: "Dacă există cel puțin un factor de risc", color: colors[6].color, linkColor: colors[6].linkColor}
+                { key: 1, parent: 0, name: "Glicemia <= 101 mg/dl \n și/sau \n Hb A1c < 5.5 %", color: colors[1].color, linkColor: colors[1].linkColor },
+                { key: 2, parent: 0, name: "Glicemia între 102-108 mg/dl \n și/sau \n Hb A1c între 5.6 - 5.9%", color: colors[2].color, linkColor: colors[2].linkColor},
+                { key: 3, parent: 0, name: "Glicemia între 109-125 mg/dl \n și/sau \n Hb A1c între 6.0 - 6.4%", color: colors[3].color, linkColor: colors[3].linkColor},
+                { key: 4, parent: 0, name: "Glicemia > 106 mg/dl \n și/sau Hb \n A1c >6.5%", color: colors[4].color, linkColor: colors[4].linkColor},
+                { key: 5, parent: 2, name: "Fără factori de risc", color: colors[5].color, linkColor: colors[5].linkColor},
+                { key: 6, parent: 2, name: "Dacă există cel puțin un factor de risc", color: colors[6].color, linkColor: colors[6].linkColor}
                
               ]
           }
@@ -156,7 +168,9 @@ function Diagram(props){
           // ]}
           //onModelChange={handleModelChange}
         />
-
+        <Fab color="primary" aria-label="play" className = {classes.fab}>
+          <PlayArrow />
+        </Fab>
         </div>
     );
 }
