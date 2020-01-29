@@ -31,9 +31,10 @@ function VariableChips(props) {
         list = chips
         list.splice(index,1)
         setChips(list)
+        props.delete(index)
         if(dummy === 1) setDummy(0)
         else setDummy(1)
-        props.delete(index)
+        
     }
     
     return (

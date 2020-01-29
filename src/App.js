@@ -55,9 +55,7 @@ class App extends React.Component {
           </Grid>
           <Grid item xs={12}>
             <Switch>
-              <Route path="/admin/create">
-                <Create />
-              </Route>
+              <Route path="/admin/create/:id" children={<Create/>}/>
               <Route path="/admin">
                 <Admin />
               </Route>

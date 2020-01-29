@@ -10,6 +10,9 @@ import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import edit from './edit-secondary.svg'
 import add from './add-secondary.svg'
+import { Link as RouterLink } from 'react-router-dom'
+import Link from '@material-ui/core/Link'
+import ButtonBase from '@material-ui/core/ButtonBase'
 
 const useStyles = makeStyles(theme => ({
   mainFeaturedPost: {
@@ -46,7 +49,17 @@ const useStyles = makeStyles(theme => ({
   cardMedia: {
     width: 160,
   },
+  cardAction: {
+      //display: 'block',
+      textAlign: 'initial',
+  }
+  
+  
 }));
+
+function generateId() {
+  return (Date.now().toString(36) + Math.random().toString(36).substring(2, 5)).toUpperCase()
+}
 
 function Admin() {
   const classes = useStyles();
@@ -89,28 +102,37 @@ function Admin() {
           </CardActionArea>
         </Grid>
         <Grid item xs={12} md={6}>
-          <CardActionArea component="a" href="admin/create">
-            <Card className={classes.card}>
-              <div className={classes.cardDetails}>
-                <CardContent>
-                  <Typography component="h2" variant="h5">
-                    Creează
+          <Link
+            to={'/admin/create/' + generateId()} underline='none'
+            component={RouterLink}
+          >
+            <ButtonBase
+            className={classes.cardAction}
+            focusRipple={true}>
+              {/* <CardActionArea> */}
+              <Card className={classes.card}>
+                <div className={classes.cardDetails}>
+                  <CardContent>
+                    <Typography component="h2" variant="h5">
+                      Creează
               </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Creează, definește și publică!
+                    <Typography variant="subtitle1" color="textSecondary">
+                      Creează, definește și publică!
               </Typography>
-                  <Typography variant="subtitle1" paragraph>
-                    Creează o nouă diagramă pe care o poți publica pentru vizualizare.
+                    <Typography variant="subtitle1" paragraph>
+                      Creează o nouă diagramă pe care o poți publica pentru vizualizare.
               </Typography>
-                </CardContent>
-              </div>
-              <CardMedia className={classes.cardMedia} image={add} title='titlu' />
-            </Card>
-          </CardActionArea>
+                  </CardContent>
+                </div>
+                <CardMedia className={classes.cardMedia} image={add} title='titlu' />
+              </Card>
+            </ButtonBase>
+              {/* </CardActionArea> */}
+          </Link>   
         </Grid>
-      </Grid>
+        </Grid>
     </Container>
-  );
-}
-
+      );
+    }
+    
 export default Admin

@@ -10,10 +10,17 @@ import Paper from '@material-ui/core/Paper'
 import Rules from './rules'
 import Button from '@material-ui/core/Button'
 import { Typography } from '@material-ui/core'
+import Diagram from '../diagram/createDiagram'
+import {useParams} from 'react-router-dom'
 
-function Create() {
+
+
+function Create(props) {
+    var {id} = useParams();
+    console.log("param unique id: " + id)
     const [variables,setVariables] = useState([])
     const [val, setVal] = useState()
+    const [toDelete, setToDelete] = useState(-1)
     const wrapperAddVariable = val => {
         var list = variables
         list.push(val)
@@ -26,15 +33,22 @@ function Create() {
         var list = variables
         list.splice(index,1)
         setVariables(list)
+        if(toDelete === index){
+            setToDelete(-2)
+        }else{
+           setToDelete(index) 
+        }
+        
         console.log("Create.js - variables - after delete " + variables)
     }
+
     return (
         <Grid container>
             <Grid item xs={4}>
                 <DiagramText />
             </Grid>
             <Grid item container justify='center' xs={8}>
-                <DiagramName />
+                <DiagramName diagramId={id}/>
             </Grid>
             <Grid item xs={12}>
                 <Divider />
@@ -63,12 +77,13 @@ function Create() {
                         <Divider />
                     </Grid>
                     <Grid item container xs={12}>
-                        <Rules />
+                        <Rules val={val} delete={toDelete}/>
                     </Grid>
                 </Paper>
             </Grid>
             <Grid item>
-                Aici vine diagrama
+                aici vine diagrama
+                <Diagram/>
             </Grid>
             <Grid container justify='flex-end' spacing={1}>
                 <Grid item>
@@ -87,7 +102,6 @@ function Create() {
                 </Grid>
 
             </Grid>
-            
         </Grid>
     );
 }

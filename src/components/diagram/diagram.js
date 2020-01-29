@@ -16,163 +16,221 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function initDiagram() {
-    const $ = go.GraphObject.make
-    const diagram =
+  const $ = go.GraphObject.make
+  const diagram =
     $(go.Diagram,
-      {layout: $(go.TreeLayout,
-                  {angle: 90, layerSpacing: 35})
+      {
+        layout: $(go.TreeLayout,
+          { angle: 90, layerSpacing: 35 })
       });
 
-    diagram.nodeTemplate = 
-      $( go.Node, "Auto",
-        $(go.Shape, {figure: "RoundedRectangle", stroke: null},
-          new go.Binding("fill","color")),
-        $(go.TextBlock,
-          "Default Text",
-          {margin: 12, stroke: "#66696b", font:"12px sans-serif" },
-          new go.Binding("text", "name"))
-      );
+  function addNodeAndLink(e, b) {
+    // take a button panel in an Adornment, get its Adornment, and then get its adorned Node
+    var node = b.part.adornedPart;
+    // we are modifying the model, so conduct a transaction
+    var diagram = node.diagram;
+    var linkIt = node.findLinksOutOf()
+    var nr = 0;
+    while (linkIt.next()) {
+      nr++
+    }
+    console.log("Din copil pleaca " + nr + "legaturi.")
 
-    diagram.linkTemplate =
-        $(go.Link,
-          {routing: go.Link.Orthogonal, corner: 5},
-          $(go.Shape, {strokeWidth: 3, stroke: "#c0cacf"},
-            new go.Binding("stroke", "linkColor"))
-          );
+    var parentsIt = node.findNodesInto()
+    var parent = ''
+    while(parentsIt.next()){
+      parent = parentsIt.value
+    }
 
-    let model = $(go.TreeModel)
-    // model.nodeDataArray = 
-    // [
-    //   { key: 0,              name: "Glicemia a Jeune \n și/sau \n Hb A1c", color: colors[0].color },
-    //   { key: 1, parent: "0", name: "Glicemia <= 101 mg/dl \n și/sau \n Hb A1c < 5.5 %", color: colors[1].color },
-    //   { key: 2, parent: "0", name: "Glicemia între 102-108 mg/dl \n și/sau \n Hb A1c între 5.6 - 5.9%", color: colors[1].color},
-    //   { key: 3, parent: "0", name: "Glicemia între 109-125 mg/dl \n și/sau \n Hb A1c între 6.0 - 6.4%", color: colors[1].color},
-    //   { key: 4, parent: "0", name: "Glicemia > 106 mg/dl \n și/sau Hb \n A1c >6.5%", color: colors[1].color}
-    // ]
-    diagram.model=model
+    var nr2 = 0
+    if(parent){
+      var parentIt = parent.findLinksOutOf()
+      while(parentIt.next()){
+        nr2++
+      }
+    }
+    console.log("Din parinte pleaca" + nr2 + "legaturi.")
+
+
+    if (nr < 2 && nr2 == 2 || !parent && nr <2) {
+      diagram.startTransaction("add node and link");
+      // have the Model add the node data
+      var newnode = { key: "N" };
+      console.log(JSON.stringify(newnode))
+      diagram.model.addNodeData(newnode);
+      // locate the node initially where the parent node is
+      diagram.findNodeForData(newnode).location = node.location;
+      // and then add a link data connecting the original node with the new one
+      var newlink = { from: node.data.key, to: newnode.key };
+      diagram.model.addLinkData(newlink);
+      // finish the transaction -- will automatically perform a layout
+      diagram.commitTransaction("add node and link");
+    } else {
+      alert("Arborele trebuie să fie binar!")
+    }
+
+    console.log("diagram.JSON: " + diagram.model.toJson())
+  }
+
+  function deleteNodeAndLink(e, b) {
+    // take a button panel in an Adornment, get its Adornment, and then get its adorned Node
+    var node = b.part.adornedPart;
+    // we are modifying the model, so conduct a transaction
+    var diagram = node.diagram;
+    diagram.remove(node)
+
+  }
+
+  diagram.nodeTemplate =
+    $(go.Node, "Auto",
+      $(go.Shape, { figure: "RoundedRectangle", stroke: null },
+        new go.Binding("fill", "color")),
+      $(go.TextBlock,
+        "Default Text",
+        { margin: 12, stroke: "#66696b", font: "12px sans-serif" },
+        new go.Binding("text", "name")),
+      {
+        selectionAdornmentTemplate:
+          $(go.Adornment, "Spot",
+            $(go.Panel, "Auto",
+              // this Adornment has a rectangular blue Shape around the selected node
+              $(go.Shape, { fill: null, stroke: "dodgerblue", strokeWidth: 3 }),
+              $(go.Placeholder)
+            ),
+            // and this Adornment has a Button to the right of the selected node
+            $("Button",
+              {
+                alignment: go.Spot.Right, alignmentFocus: go.Spot.Left,
+                click: deleteNodeAndLink
+              },  // define click behavior for Button in Adornment
+              $(go.TextBlock, "DEL",  // the Button content
+                { font: "bold 6pt sans-serif" })
+            ),
+            $(go.Panel, "Horizontal",
+              { alignment: go.Spot.Bottom, alignmentFocus: go.Spot.Top},
+              $("Button",
+                { click: addNodeAndLink },  // defined below, to support editing the text of the node
+                $(go.TextBlock, "ADD",
+                  { font: "bold 6pt sans-serif"})
+              ),
+            )
+
+          )  // end Adornment
+      }
+    );
+
+  diagram.linkTemplate =
+    $(go.Link,
+      { routing: go.Link.Orthogonal, corner: 5 },
+      $(go.Shape, { strokeWidth: 3, stroke: "#c0cacf" },
+        new go.Binding("stroke", "linkColor"))
+    );
+
+  let model = $(go.GraphLinksModel)
+  diagram.model = model
   return diagram
 }
 
 function handleModelChange(changes) {
-    alert('GoJS model changed!');
+  alert('GoJS model changed!');
 }
 
-  function resolveAfter2Seconds() {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve('resolved');
-        }, 1000);
-      });
-    }
+function resolveAfter2Seconds() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('resolved');
+    }, 1000);
+  });
+}
 
 
-    
-function Diagram(props){
+
+function Diagram(props) {
   console.log("Trebuie sa randez: " + props.content + " si sa nu uit sa pun un if de verificare daca e undefined")
-   const nodesColors = [{id: 0 , color: "#c0cacf", linkColor: "#c0cacf"},
-                         {id: 1 , color: "#c0cacf", linkColor: "#c0cacf"},
-                         {id: 2 , color: "#c0cacf", linkColor: "#c0cacf"},
-                         {id: 3 , color: "#c0cacf", linkColor: "#c0cacf"},
-                         {id: 4 , color: "#c0cacf", linkColor: "#c0cacf"},
-                         {id: 5 , color: "#c0cacf", linkColor: "#c0cacf"},
-                         {id: 6 , color: "#c0cacf", linkColor: "#c0cacf"}
-                        ]
-    
-    const [colors, setColors] = useState(nodesColors)
-    async function handleClick () {
-      
-      setColors([
-      {id: 0 , color: "#001c4a", linkColor: "#c0cacf"},
-      {id: 1 , color: "#c0cacf", linkColor: "#c0cacf"},
-      {id: 2 , color: "#c0cacf", linkColor: "#c0cacf"},
-      {id: 3 , color: "#c0cacf", linkColor: "#c0cacf"},
-      {id: 4 , color: "#c0cacf", linkColor: "#c0cacf"},
-      {id: 5 , color: "#c0cacf", linkColor: "#c0cacf"},
-      {id: 6 , color: "#c0cacf", linkColor: "#c0cacf"}
-     ])
-      var result = await resolveAfter2Seconds();
-       setColors([
-        {id: 0 , color: "#001c4a", linkColor: "#001c4a"},
-        {id: 1 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 2 , color: "#c0cacf", linkColor: "#001c4a"},
-        {id: 3 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 4 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 5 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 6 , color: "#c0cacf", linkColor: "#c0cacf"}
-       ])
-       var result = await resolveAfter2Seconds();
-       setColors([
-        {id: 0 , color: "#001c4a", linkColor: "#001c4a"},
-        {id: 1 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 2 , color: "#001c4a", linkColor: "#001c4a"},
-        {id: 3 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 4 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 5 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 6 , color: "#c0cacf", linkColor: "#c0cacf"}
-       ])
-       var result = await resolveAfter2Seconds();
-       setColors([
-        {id: 0 , color: "#001c4a", linkColor: "#001c4a"},
-        {id: 1 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 2 , color: "#001c4a", linkColor: "#001c4a"},
-        {id: 3 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 4 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 5 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 6 , color: "#c0cacf", linkColor: "#001c4a"}
-       ])
-       var result = await resolveAfter2Seconds();
-       setColors([
-        {id: 0 , color: "#001c4a", linkColor: "#001c4a"},
-        {id: 1 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 2 , color: "#001c4a", linkColor: "#001c4a"},
-        {id: 3 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 4 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 5 , color: "#c0cacf", linkColor: "#c0cacf"},
-        {id: 6 , color: "#001c4a", linkColor: "#001c4a"}
-       ])
-      
-    }
-    const classes = useStyles();
-    return(
-        <div>
-        <Button variant="outlined" color="primary" onClick={handleClick}>
-            Start
+  const nodesColors = [{ id: 0, color: "#c0cacf", linkColor: "#c0cacf" },
+  { id: 1, color: "#c0cacf", linkColor: "#c0cacf" },
+  { id: 2, color: "#c0cacf", linkColor: "#c0cacf" },
+  { id: 3, color: "#c0cacf", linkColor: "#c0cacf" },
+  { id: 4, color: "#c0cacf", linkColor: "#c0cacf" },
+  { id: 5, color: "#c0cacf", linkColor: "#c0cacf" },
+  { id: 6, color: "#c0cacf", linkColor: "#c0cacf" }
+  ]
+
+  const [colors, setColors] = useState(nodesColors)
+  async function handleClick() {
+
+    setColors([
+      { id: 0, color: "#001c4a", linkColor: "#c0cacf" },
+      { id: 1, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 2, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 3, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 4, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 5, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 6, color: "#c0cacf", linkColor: "#c0cacf" }
+    ])
+    var result = await resolveAfter2Seconds();
+    setColors([
+      { id: 0, color: "#001c4a", linkColor: "#001c4a" },
+      { id: 1, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 2, color: "#c0cacf", linkColor: "#001c4a" },
+      { id: 3, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 4, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 5, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 6, color: "#c0cacf", linkColor: "#c0cacf" }
+    ])
+    var result = await resolveAfter2Seconds();
+    setColors([
+      { id: 0, color: "#001c4a", linkColor: "#001c4a" },
+      { id: 1, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 2, color: "#001c4a", linkColor: "#001c4a" },
+      { id: 3, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 4, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 5, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 6, color: "#c0cacf", linkColor: "#c0cacf" }
+    ])
+    var result = await resolveAfter2Seconds();
+    setColors([
+      { id: 0, color: "#001c4a", linkColor: "#001c4a" },
+      { id: 1, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 2, color: "#001c4a", linkColor: "#001c4a" },
+      { id: 3, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 4, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 5, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 6, color: "#c0cacf", linkColor: "#001c4a" }
+    ])
+    var result = await resolveAfter2Seconds();
+    setColors([
+      { id: 0, color: "#001c4a", linkColor: "#001c4a" },
+      { id: 1, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 2, color: "#001c4a", linkColor: "#001c4a" },
+      { id: 3, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 4, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 5, color: "#c0cacf", linkColor: "#c0cacf" },
+      { id: 6, color: "#001c4a", linkColor: "#001c4a" }
+    ])
+
+  }
+  const classes = useStyles();
+  return (
+    <div>
+      <Button variant="outlined" color="primary" onClick={handleClick}>
+        Start
         </Button>
-        <ReactDiagram
-          initDiagram={initDiagram}
-          divClassName='diagram-component'
-          nodeDataArray={
-              [
-                { key: 0,              name: "Glicemia a Jeune \n și/sau \n Hb A1c", color: colors[0].color, linkColor: colors[0].linkColor },
-                { key: 1, parent: 0, name: "Glicemia <= 101 mg/dl \n și/sau \n Hb A1c < 5.5 %", color: colors[1].color, linkColor: colors[1].linkColor },
-                { key: 2, parent: 0, name: "Glicemia între 102-108 mg/dl \n și/sau \n Hb A1c între 5.6 - 5.9%", color: colors[2].color, linkColor: colors[2].linkColor},
-                { key: 3, parent: 0, name: "Glicemia între 109-125 mg/dl \n și/sau \n Hb A1c între 6.0 - 6.4%", color: colors[3].color, linkColor: colors[3].linkColor},
-                { key: 4, parent: 0, name: "Glicemia > 106 mg/dl \n și/sau Hb \n A1c >6.5%", color: colors[4].color, linkColor: colors[4].linkColor},
-                { key: 5, parent: 2, name: "Fără factori de risc", color: colors[5].color, linkColor: colors[5].linkColor},
-                { key: 6, parent: 2, name: "Dacă există cel puțin un factor de risc", color: colors[6].color, linkColor: colors[6].linkColor}
-               
-              ]
-          }
-          // nodeDataArray={[
-          //   { key: 0, text: 'Hellloou', color: 'lightblue', loc: '0 0' },
-          //   { key: 1, text: 'Beta', color: 'orange', loc: '150 0' },
-          //   { key: 2, text: 'Gamma', color: 'lightgreen', loc: '0 150' },
-          //   { key: 3, text: 'Delta', color: 'pink', loc: '150 150' }
-          // ]}
-          // linkDataArray={[
-          //   { key: -1, from: 0, to: 1 },
-          //   { key: -2, from: 0, to: 2 },
-          //   { key: -3, from: 1, to: 1 },
-          //   { key: -4, from: 2, to: 3 },
-          //   { key: -5, from: 3, to: 0 }
-          // ]}
-          //onModelChange={handleModelChange}
-        />
-        <Fab color="primary" aria-label="play" className = {classes.fab}>
-          <PlayArrow />
-        </Fab>
-        </div>
-    );
+      <ReactDiagram
+        initDiagram={initDiagram}
+        divClassName='diagram-component'
+        nodeDataArray={
+          [
+            { key: "Alpha", color: '#c0cacf' },
+          ]
+        }
+        linkDataArray={[]}
+      />
+      <Fab color="primary" aria-label="play" className={classes.fab}>
+        <PlayArrow />
+      </Fab>
+    </div>
+  );
 }
 
 export default Diagram;

@@ -2,7 +2,7 @@ import React from 'react'
 function About(){
     return(
         <div>
-          Hello esti pe about page  
+          Hello esti pe about page 
         </div>
         
     );

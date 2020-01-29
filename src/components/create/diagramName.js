@@ -16,8 +16,14 @@ const useStyles = makeStyles(theme => ({
     },
     labelFocused: {},
 }));
-function DiagramName() {
+
+const saveName = ()=>{
+    //apeleaza ruta din backend care cauta o diagrama
+    //cu id-ul respectiv si ii modifica proprietatea "name"
+}
+function DiagramName(props) {
     const classes = useStyles()
+    console.log(props.diagramId)
     return (
         <form autoComplete='off'>
             <TextField
@@ -35,7 +41,8 @@ function DiagramName() {
                     }
                 }}
                 label='Numele diagramei'
-                color='secondary' />
+                color='secondary'
+                onBlur={saveName}/>
         </form>
     )
 }

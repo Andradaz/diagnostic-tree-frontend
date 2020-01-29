@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
@@ -16,16 +16,50 @@ const useStyles = makeStyles(theme => ({
     },
     root: {
         '& > *': {
-          width: 100,
+            width: 100,
         }
     }
 }));
 
-function Rules() {
+function Rules(props) {
     const classes = useStyles()
-    const [age, setAge] = React.useState('')
+    const [selectItem, setSelectItem] = React.useState('')
+    const [prevVal, setPrevVal] = useState()
+    const [selectItems, setSelectItems] = useState([])
+    const [toDelete, setToDelete] = React.useState(-1)
+    const [operator, setOperator] = React.useState(10)
+
+    if (prevVal !== props.val) {
+        setPrevVal(props.val)
+        let list
+        list = selectItems
+        list.push(props.val)
+        setSelectItems(list)
+    }
+    console.log("selectItems:" + selectItems)
+        if ((props.delete !== toDelete) && (props.delete !== -2)) {
+            setToDelete(props.delete)
+            let list
+            list = selectItems
+            list.splice(props.delete, 1)
+            setSelectItems(list)
+        }else{
+            if (props.delete === -2 && toDelete !== -2) {
+                let list
+                list = selectItems
+                list.splice(toDelete, 1)
+                setSelectItems(list)
+                setToDelete(-2)
+            }
+        }
+    
+
+    const handleChangeOp = event => {
+        setOperator(event.target.value)
+    }
+    
     const handleChange = event => {
-        setAge(event.target.value);
+        setSelectItem(event.target.value)
     };
     return (
         <Grid container>
@@ -41,7 +75,7 @@ function Rules() {
                     <Typography variant='body2'>
                         Prima regulă*
                     </Typography>
-                </Box>    
+                </Box>
             </Grid>
             <Grid item xs={12}>
                 <Box pl={3}>
@@ -51,12 +85,12 @@ function Rules() {
                             color='secondary'
                             labelId="variabila"
                             id="variabila1"
-                            value={age}
+                            value={selectItem}
                             onChange={handleChange}
                         >
-                            <MenuItem value={10}>Glicemie</MenuItem>
-                            <MenuItem value={20}>Hb</MenuItem>
-                            <MenuItem value={30}>Factor de riscaaaaaa</MenuItem>
+                            {selectItems.map((obj, index) =>
+                                <MenuItem value={index} key={index}>{obj}</MenuItem>
+                            )}
                         </Select>
                     </FormControl>
                 </Box>
@@ -69,12 +103,12 @@ function Rules() {
                             color='secondary'
                             labelId="operator"
                             id="operator1"
-                            value={age}
-                            onChange={handleChange}
+                            value={operator}
+                            onChange={handleChangeOp}
                         >
-                            <MenuItem value={10}>mai mare</MenuItem>
-                            <MenuItem value={20}>mai mic</MenuItem>
-                            <MenuItem value={30}>egal</MenuItem>
+                            <MenuItem value={10}>Mai mare</MenuItem>
+                            <MenuItem value={20}>Mai mic</MenuItem>
+                            <MenuItem value={30}>Egal</MenuItem>
                         </Select>
                     </FormControl>
                 </Box>
@@ -82,7 +116,7 @@ function Rules() {
             <Grid item xs={12}>
                 <Box pl={4} pb={2}>
                     <form className={classes.root} noValidate autoComplete="off">
-                        <TextField id="parametru" label="Parametru" color='secondary'/>
+                        <TextField id="parametru" label="Parametru" color='secondary' />
                     </form>
                 </Box>
             </Grid>
