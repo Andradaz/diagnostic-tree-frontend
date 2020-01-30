@@ -22,9 +22,22 @@ class Diagram extends React.Component {
         var diagram = node.diagram;
         var linkIt = node.findLinksOutOf()
         var nr = 0;
+
+        var BrotherDecision = true
+        var myDecision = true
         while (linkIt.next()) {
             nr++
+            BrotherDecision = linkIt.value.data.text
+            console.log("Brother Decision în while " + BrotherDecision )
         }
+
+        if(BrotherDecision === myDecision){
+            console.log("Aceeasi decizie")
+            myDecision = !BrotherDecision
+            console.log("Decizia mea: " + myDecision)
+        }
+        
+        
         console.log("Din copil pleaca " + nr + "legaturi.")
 
         var parentsIt = node.findNodesInto()
@@ -39,6 +52,7 @@ class Diagram extends React.Component {
             while (parentIt.next()) {
                 nr2++
             }
+            
         }
         console.log("Din parinte pleaca" + nr2 + "legaturi.")
 
@@ -54,20 +68,23 @@ class Diagram extends React.Component {
             // and then add a link data connecting the original node with the new one
             var newlink = { from: node.data.key, to: newnode.key };
             diagram.model.addLinkData(newlink);
+            var newlinkObject = diagram.findLinkForData(newlink)
+
+            diagram.model.setDataProperty(newlinkObject.data, "text", myDecision)
             // finish the transaction -- will automatically perform a layout
             diagram.commitTransaction("add node and link");
-            var model = JSON.parse(diagram.model.toJson())
+            let model = JSON.parse(diagram.model.toJson())
             this.setState({
                 nodeDataArray: model.nodeDataArray,
             })
-            
+
             console.log("state: " + JSON.stringify(this.state))
             console.log("diagram.JSON: " + JSON.stringify(model))
         } else {
             alert("Arborele trebuie să fie binar!")
         }
-        
-       
+
+
     }
 
     initDiagram() {
@@ -85,7 +102,11 @@ class Diagram extends React.Component {
             var node = b.part.adornedPart;
             // we are modifying the model, so conduct a transaction
             var diagram = node.diagram;
+            diagram.startTransaction("remove node and link");
             diagram.remove(node)
+            diagram.commitTransaction("remove node and link");
+            let afterdelete =  JSON.parse(diagram.model.toJson())
+            console.log("Dupa stergere: " + JSON.stringify(afterdelete))
 
         }
 
@@ -131,8 +152,14 @@ class Diagram extends React.Component {
             $(go.Link,
                 { routing: go.Link.Orthogonal, corner: 5 },
                 $(go.Shape, { strokeWidth: 3, stroke: "#c0cacf" },
-                    new go.Binding("stroke", "linkColor"))
-            );
+                    new go.Binding("stroke", "linkColor")),
+                $(go.Panel, "Auto",  // this whole Panel is a link label
+                    $(go.Shape, "RoundedRectangle", { fill: "white", stroke: "gray" }),
+                    $(go.TextBlock, { margin: 3, font: "bold 6pt sans-serif" },
+                        new go.Binding("text", "text"))
+                )
+                );
+            
 
         let model = $(go.GraphLinksModel)
         diagram.model = model
