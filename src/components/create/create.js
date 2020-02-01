@@ -11,8 +11,10 @@ import Rules from './rules'
 import Button from '@material-ui/core/Button'
 import { Typography } from '@material-ui/core'
 import Diagram from '../diagram/createDiagram'
+//import Diagram from '../diagram/copy'
 import {useParams} from 'react-router-dom'
-
+import SetVariable from '../../services/setVariable'
+import DeleteVariable from '../../services/deleteVariable'
 
 
 function Create(props) {
@@ -21,16 +23,29 @@ function Create(props) {
     const [variables,setVariables] = useState([])
     const [val, setVal] = useState()
     const [toDelete, setToDelete] = useState(-1)
-    const wrapperAddVariable = val => {
+    const [currentNode, setCurrentNode] = useState(0)
+    const wrapperAddVariable = async (val) => {
         var list = variables
         list.push(val)
+        let data = {
+            "variable": val,
+            "idgen": id
+        }
+        const result =  await SetVariable(data)
+        console.log(result)
         setVariables(list)
         setVal(val)
         console.log("Create.js - variables: " + variables)
     }
 
-    const wrapperDeleteVariable = index => {
+    const wrapperDeleteVariable = async (index) => {
         var list = variables
+        let data = {
+            "idgen": id,
+            "index": index
+        }
+        let response = await DeleteVariable(data)
+        console.log(response)
         list.splice(index,1)
         setVariables(list)
         if(toDelete === index){
@@ -42,7 +57,12 @@ function Create(props) {
         console.log("Create.js - variables - after delete " + variables)
     }
 
+    const wrapperSetCurrentNode = val => {
+        setCurrentNode(val)
+    }
+    console.log("M-a apelat din diagram.js: " + currentNode)
     return (
+        
         <Grid container>
             <Grid item xs={4}>
                 <DiagramText />
@@ -77,13 +97,13 @@ function Create(props) {
                         <Divider />
                     </Grid>
                     <Grid item container xs={12}>
-                        <Rules val={val} delete={toDelete}/>
+                        <Rules val={val} delete={toDelete} currentNode={currentNode} diagramId={id}/>
                     </Grid>
                 </Paper>
             </Grid>
             <Grid item>
                 aici vine diagrama
-                <Diagram/>
+                <Diagram setCurrentNode={wrapperSetCurrentNode}/>
             </Grid>
             <Grid container justify='flex-end' spacing={1}>
                 <Grid item>

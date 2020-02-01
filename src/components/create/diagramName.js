@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
-
+import SetName from '../../services/setName'
 const useStyles = makeStyles(theme => ({
     textField: {
         width: 550,
@@ -17,13 +17,24 @@ const useStyles = makeStyles(theme => ({
     labelFocused: {},
 }));
 
-const saveName = ()=>{
-    //apeleaza ruta din backend care cauta o diagrama
-    //cu id-ul respectiv si ii modifica proprietatea "name"
-}
+const saveName = async (name,idgen) => {
+        let data = {
+            "name": name,
+            "idgen": idgen
+        }
+        var response = await SetName(data)
+        console.log(response)
+    }
+
 function DiagramName(props) {
     const classes = useStyles()
+    const [name, setName] = useState()
     console.log(props.diagramId)
+    
+    const handleChange = (event) => {
+        setName(event.target.value)
+    }
+
     return (
         <form autoComplete='off'>
             <TextField
@@ -42,7 +53,8 @@ function DiagramName(props) {
                 }}
                 label='Numele diagramei'
                 color='secondary'
-                onBlur={saveName}/>
+                onChange={handleChange}
+                onBlur={function(){ return saveName(name,props.diagramId)}} />
         </form>
     )
 }

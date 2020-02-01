@@ -10,9 +10,16 @@ class Diagram extends React.Component {
             nodeDataArray: [{ key: "Alpha", color: '#c0cacf' }],
             linkDataArray: []
         }
-        this.initDiagram = this.initDiagram.bind(this);
+        this.initDiagram = this.initDiagram.bind(this)
         this.addNodeAndLink = this.addNodeAndLink.bind(this)
+        this.onNodeClick = this.onNodeClick.bind(this)
 
+    }
+
+    onNodeClick(e){
+            var part = e.subject.part;
+            if (!(part instanceof go.Link)) this.props.setCurrentNode(part.data.key);
+            console.log("Am trimis: " + part.data.key)
     }
 
     addNodeAndLink(e, b) {
@@ -28,16 +35,16 @@ class Diagram extends React.Component {
         while (linkIt.next()) {
             nr++
             BrotherDecision = linkIt.value.data.text
-            console.log("Brother Decision în while " + BrotherDecision )
+            console.log("Brother Decision în while " + BrotherDecision)
         }
 
-        if(BrotherDecision === myDecision){
+        if (BrotherDecision === myDecision) {
             console.log("Aceeasi decizie")
             myDecision = !BrotherDecision
             console.log("Decizia mea: " + myDecision)
         }
-        
-        
+
+
         console.log("Din copil pleaca " + nr + "legaturi.")
 
         var parentsIt = node.findNodesInto()
@@ -52,7 +59,7 @@ class Diagram extends React.Component {
             while (parentIt.next()) {
                 nr2++
             }
-            
+
         }
         console.log("Din parinte pleaca" + nr2 + "legaturi.")
 
@@ -105,7 +112,7 @@ class Diagram extends React.Component {
             diagram.startTransaction("remove node and link");
             diagram.remove(node)
             diagram.commitTransaction("remove node and link");
-            let afterdelete =  JSON.parse(diagram.model.toJson())
+            let afterdelete = JSON.parse(diagram.model.toJson())
             console.log("Dupa stergere: " + JSON.stringify(afterdelete))
 
         }
@@ -158,8 +165,9 @@ class Diagram extends React.Component {
                     $(go.TextBlock, { margin: 3, font: "bold 6pt sans-serif" },
                         new go.Binding("text", "text"))
                 )
-                );
-            
+            );
+
+        diagram.addDiagramListener("ObjectSingleClicked",this.onNodeClick);
 
         let model = $(go.GraphLinksModel)
         diagram.model = model

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
@@ -8,6 +8,9 @@ import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import InputLabel from '@material-ui/core/InputLabel'
 import TextField from '@material-ui/core/TextField'
+import SetRuleVariable from '../../services/setRuleVariable'
+import SetRuleOperator from '../../services/setRuleOperator'
+import SetRuleParameter from '../../services/setRuleParameter'
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -25,9 +28,18 @@ function Rules(props) {
     const classes = useStyles()
     const [selectItem, setSelectItem] = React.useState('')
     const [prevVal, setPrevVal] = useState()
+    const [prevCurrentNode, setPrevCurrentNode] = useState()
     const [selectItems, setSelectItems] = useState([])
     const [toDelete, setToDelete] = React.useState(-1)
     const [operator, setOperator] = React.useState(10)
+    const [param, setParam] = React.useState()
+
+    useEffect(() => {
+
+        //get param for props.currentNode
+        //get selectedItem for porps.currentNode
+        //get variable for props.currentNode
+    })
 
     if (prevVal !== props.val) {
         setPrevVal(props.val)
@@ -37,30 +49,64 @@ function Rules(props) {
         setSelectItems(list)
     }
     console.log("selectItems:" + selectItems)
-        if ((props.delete !== toDelete) && (props.delete !== -2)) {
-            setToDelete(props.delete)
+    if ((props.delete !== toDelete) && (props.delete !== -2)) {
+        setToDelete(props.delete)
+        let list
+        list = selectItems
+        list.splice(props.delete, 1)
+        setSelectItems(list)
+    } else {
+        if (props.delete === -2 && toDelete !== -2) {
             let list
             list = selectItems
-            list.splice(props.delete, 1)
+            list.splice(toDelete, 1)
             setSelectItems(list)
-        }else{
-            if (props.delete === -2 && toDelete !== -2) {
-                let list
-                list = selectItems
-                list.splice(toDelete, 1)
-                setSelectItems(list)
-                setToDelete(-2)
-            }
+            setToDelete(-2)
         }
-    
+    }
 
-    const handleChangeOp = event => {
+
+    const handleChangeOp = async (event) => {
+        let data = {
+            "operator": event.target.value,
+            "idgen": props.diagramId,
+            "idnode": props.currentNode
+        }
+        let response = await SetRuleOperator(data)
+        console.log(response)
         setOperator(event.target.value)
     }
-    
-    const handleChange = event => {
+
+    const handleChange = async (event) => {
+        let data = {
+            "variable": selectItems[event.target.value],
+            "idgen": props.diagramId,
+            "idnode": props.currentNode
+        }
+        let response = await SetRuleVariable(data)
+        console.log(response)
         setSelectItem(event.target.value)
     };
+
+    const handleChangeParam = event => {
+        setParam(event.target.value)
+    }
+
+    const paramOnBlur = async (event) => {
+        let data = {
+            "parameter": event.target.value,
+            "idgen": props.diagramId,
+            "idnode": props.currentNode
+        }
+        let response = await SetRuleParameter(data)
+        console.log(response)
+    }
+
+    if (prevCurrentNode !== props.currentNode) {
+        setPrevCurrentNode(props.currentNode)
+        console.log("props.currentNode in Rules: " + props.currentNode)
+    }
+
     return (
         <Grid container>
             <Grid item xs={12}>
@@ -116,7 +162,13 @@ function Rules(props) {
             <Grid item xs={12}>
                 <Box pl={4} pb={2}>
                     <form className={classes.root} noValidate autoComplete="off">
-                        <TextField id="parametru" label="Parametru" color='secondary' />
+                        <TextField 
+                        id="parametru" 
+                        value={param || ''}
+                        label="Parametru" 
+                        color='secondary' 
+                        onChange={handleChangeParam} 
+                        onBlur={paramOnBlur}/>
                     </form>
                 </Box>
             </Grid>
