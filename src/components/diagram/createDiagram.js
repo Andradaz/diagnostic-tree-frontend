@@ -2,36 +2,53 @@ import React from 'react'
 import * as go from 'gojs'
 import { ReactDiagram } from 'gojs-react'
 import '../diagram/diagram.css'
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
+import setDiagram from '../../services/setDiagram'
+import Snackbar from '@material-ui/core/Snackbar'
+import MuiAlert from '@material-ui/lab/Alert'
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
 
 class Diagram extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            nodeDataArray: [{ key: "Alpha", color: '#c0cacf' }],
-            linkDataArray: []
+            nodeDataArray: [{ key: "Alpha", color: '#c0cacf',name: "Nod1" }],
+            linkDataArray: [],
+            save: {},
+            open: false
         }
         this.initDiagram = this.initDiagram.bind(this)
         this.addNodeAndLink = this.addNodeAndLink.bind(this)
         this.onNodeClick = this.onNodeClick.bind(this)
-
+        this.save = this.save.bind(this)
+        this.handleClose = this.handleClose.bind(this)
+        this.textEdited = this.textEdited.bind(this)
     }
 
-    onNodeClick(e){
-            var part = e.subject.part;
-            if (!(part instanceof go.Link)) this.props.setCurrentNode(part.data.key);
+    onNodeClick(e) {
+        let part = e.subject.part;
+        if (part instanceof go.Node) {
+            this.props.setCurrentNode(part.data.key);
             console.log("Am trimis: " + part.data.key)
+        }
     }
+
 
     addNodeAndLink(e, b) {
         // take a button panel in an Adornment, get its Adornment, and then get its adorned Node
-        var node = b.part.adornedPart;
+        let node = b.part.adornedPart;
         // we are modifying the model, so conduct a transaction
-        var diagram = node.diagram;
-        var linkIt = node.findLinksOutOf()
-        var nr = 0;
+        let diagram = node.diagram;
+        let linkIt = node.findLinksOutOf()
+        let nr = 0;
 
-        var BrotherDecision = true
-        var myDecision = true
+        let BrotherDecision = true
+        let myDecision = true
         while (linkIt.next()) {
             nr++
             BrotherDecision = linkIt.value.data.text
@@ -47,15 +64,15 @@ class Diagram extends React.Component {
 
         console.log("Din copil pleaca " + nr + "legaturi.")
 
-        var parentsIt = node.findNodesInto()
-        var parent = ''
+        let parentsIt = node.findNodesInto()
+        let parent = ''
         while (parentsIt.next()) {
             parent = parentsIt.value
         }
 
-        var nr2 = 0
+        let nr2 = 0
         if (parent) {
-            var parentIt = parent.findLinksOutOf()
+            let parentIt = parent.findLinksOutOf()
             while (parentIt.next()) {
                 nr2++
             }
@@ -67,15 +84,15 @@ class Diagram extends React.Component {
         if ((nr < 2 && nr2 === 2) || (!parent && nr < 2)) {
             diagram.startTransaction("add node and link");
             // have the Model add the node data
-            var newnode = { key: "N" };
+            let newnode = { key: "N", color: '#c0cacf' };
             console.log(JSON.stringify(newnode))
             diagram.model.addNodeData(newnode);
             // locate the node initially where the parent node is
             diagram.findNodeForData(newnode).location = node.location;
             // and then add a link data connecting the original node with the new one
-            var newlink = { from: node.data.key, to: newnode.key };
+            let newlink = { from: node.data.key, to: newnode.key };
             diagram.model.addLinkData(newlink);
-            var newlinkObject = diagram.findLinkForData(newlink)
+            let newlinkObject = diagram.findLinkForData(newlink)
 
             diagram.model.setDataProperty(newlinkObject.data, "text", myDecision)
             // finish the transaction -- will automatically perform a layout
@@ -91,7 +108,22 @@ class Diagram extends React.Component {
             alert("Arborele trebuie să fie binar!")
         }
 
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        console.log("Diagram model" + diagram.model.toJson())
+        this.setState({ save: diagram.model.toJson() })
+        
 
+    }
+
+    textEdited(e){
+        //e.subject is the Text Block
+        //e.parameter is the original string
+        //e.diagram gets the diagram
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!TEXT EDITED!!!!!!!!!!!!")
+        console.log(e.subject.text)
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!Diagram model!!!!!!!!!!!!")
+        console.log(e.diagram.model.toJson())
+        this.setState({save: e.diagram.model.toJson()})
     }
 
     initDiagram() {
@@ -115,16 +147,16 @@ class Diagram extends React.Component {
             let afterdelete = JSON.parse(diagram.model.toJson())
             console.log("Dupa stergere: " + JSON.stringify(afterdelete))
 
-        }
+        } 
 
         diagram.nodeTemplate =
             $(go.Node, "Auto",
                 $(go.Shape, { figure: "RoundedRectangle", stroke: null },
                     new go.Binding("fill", "color")),
                 $(go.TextBlock,
-                    "Default Text",
-                    { margin: 12, stroke: "#66696b", font: "12px sans-serif" },
-                    new go.Binding("text", "name")),
+                    "Click to edit",
+                    { margin: 12, stroke: "#66696b", font: "12px sans-serif", editable: true },
+                    new go.Binding("text", "name").makeTwoWay()),
                 {
                     selectionAdornmentTemplate:
                         $(go.Adornment, "Spot",
@@ -167,23 +199,69 @@ class Diagram extends React.Component {
                 )
             );
 
-        diagram.addDiagramListener("ObjectSingleClicked",this.onNodeClick);
+        diagram.addDiagramListener("ObjectSingleClicked", this.onNodeClick);
+        diagram.addDiagramListener("TextEdited", this.textEdited)
 
         let model = $(go.GraphLinksModel)
         diagram.model = model
         return diagram
     }
 
+    async save() {
+        console.log("Id in save:" + this.props.id)
+        let data = {
+            idgen: this.props.id,
+            diagram: this.state.save
+        }
+        console.log("Data inainte de save:" + JSON.stringify(data))
+        let result = await setDiagram(data)
+        //Validare date
+        console.log(result)
+        this.setState({ open: true })
+
+
+    }
+
+    handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        this.setState({ open: false })
+    };
+
     render() {
         return (
-            <div>
+            <Grid>
                 <ReactDiagram
                     initDiagram={this.initDiagram}
                     divClassName='diagram-component'
                     nodeDataArray={this.state.nodeDataArray}
                     linkDataArray={this.state.linkDataArray}
                 />
-            </div>
+                <Grid container justify='flex-end' spacing={1}>
+                    <Grid item>
+                        <Button variant="contained" disapletypography='true' onClick={this.save}>
+                            <Typography>
+                                Salvează
+                        </Typography>
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Button variant="contained" color='primary' disapletypography='true'>
+                            <Typography>
+                                {/* pun intr-un json in backend numele diagramei si id-ul, apoi cand randez
+                        meniul il randez folosesc jsonul respectiv  */}
+                        Publică
+                        </Typography>
+                        </Button>
+                    </Grid>
+                </Grid>
+                <Snackbar open={this.state.open} autoHideDuration={3000} onClose={this.handleClose}>
+                    <Alert onClose={this.handleClose} severity="success">
+                        Diagrama a fost salvată!
+                    </Alert>
+                </Snackbar>
+            </Grid>
         );
     }
 }

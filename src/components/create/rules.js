@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useEffect} from 'react'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
@@ -11,6 +11,9 @@ import TextField from '@material-ui/core/TextField'
 import SetRuleVariable from '../../services/setRuleVariable'
 import SetRuleOperator from '../../services/setRuleOperator'
 import SetRuleParameter from '../../services/setRuleParameter'
+import GetRuleVariableForNode from '../../services/getRuleVariableForNode'
+import GetRuleOperatorForNode from '../../services/getRuleOperatorForNode'
+import GetRuleParameterForNode from '../../services/getRuleParameterForNode'
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -35,11 +38,35 @@ function Rules(props) {
     const [param, setParam] = React.useState()
 
     useEffect(() => {
-
+        //facem fetchData doar daca avem selectat un nod
         //get param for props.currentNode
         //get selectedItem for porps.currentNode
         //get variable for props.currentNode
-    })
+        async function fetchData() {
+            if (props.currentNode !== 0) {
+                let data = {
+                    "idgen": props.diagramId,
+                    "idnode": props.currentNode
+                }
+                let variable = await GetRuleVariableForNode(data)
+                let parameter = await GetRuleParameterForNode(data)
+                let operator = await GetRuleOperatorForNode(data)
+                if(JSON.stringify(parameter.data) !== "not defined"){
+                     setParam(JSON.stringify(parameter.data))
+                }
+               
+                setSelectItem(JSON.stringify(variable.data))
+                setOperator(JSON.stringify(operator.data))
+                console.log("Variable:" + JSON.stringify(variable))
+                console.log("Parameter:" + JSON.stringify(parameter))
+                console.log("Operator:" + JSON.stringify(operator))
+            }
+            console.log("Sunt in fetchdata")
+        }
+        fetchData();
+    }, [props.currentNode])
+
+    
 
     if (prevVal !== props.val) {
         setPrevVal(props.val)
@@ -79,7 +106,7 @@ function Rules(props) {
 
     const handleChange = async (event) => {
         let data = {
-            "variable": selectItems[event.target.value],
+            "variable": event.target.value,
             "idgen": props.diagramId,
             "idnode": props.currentNode
         }
@@ -162,13 +189,13 @@ function Rules(props) {
             <Grid item xs={12}>
                 <Box pl={4} pb={2}>
                     <form className={classes.root} noValidate autoComplete="off">
-                        <TextField 
-                        id="parametru" 
-                        value={param || ''}
-                        label="Parametru" 
-                        color='secondary' 
-                        onChange={handleChangeParam} 
-                        onBlur={paramOnBlur}/>
+                        <TextField
+                            id="parametru"
+                            value={param || ''}
+                            label="Parametru"
+                            color='secondary'
+                            onChange={handleChangeParam}
+                            onBlur={paramOnBlur} />
                     </form>
                 </Box>
             </Grid>

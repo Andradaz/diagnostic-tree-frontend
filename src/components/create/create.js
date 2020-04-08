@@ -8,8 +8,6 @@ import VariableText from './variableText'
 import VariableChips from './variableChips'
 import Paper from '@material-ui/core/Paper'
 import Rules from './rules'
-import Button from '@material-ui/core/Button'
-import { Typography } from '@material-ui/core'
 import Diagram from '../diagram/createDiagram'
 //import Diagram from '../diagram/copy'
 import {useParams} from 'react-router-dom'
@@ -91,9 +89,6 @@ function Create(props) {
                         <Divider />
                     </Grid>
                     <Grid item xs={12}>
-                        Aici vine inspectorul de nod
-                    </Grid>
-                    <Grid item xs={12}>
                         <Divider />
                     </Grid>
                     <Grid item container xs={12}>
@@ -102,25 +97,7 @@ function Create(props) {
                 </Paper>
             </Grid>
             <Grid item>
-                aici vine diagrama
-                <Diagram setCurrentNode={wrapperSetCurrentNode}/>
-            </Grid>
-            <Grid container justify='flex-end' spacing={1}>
-                <Grid item>
-                    <Button variant="contained" disapletypography='true'>
-                        <Typography>
-                        Salvează
-                        </Typography>
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button variant="contained" color='primary' disapletypography='true'>
-                        <Typography>
-                        Publică
-                        </Typography>
-                    </Button>
-                </Grid>
-
+                <Diagram setCurrentNode={wrapperSetCurrentNode} id={id}/>
             </Grid>
         </Grid>
     );
