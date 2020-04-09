@@ -9,7 +9,6 @@ import VariableChips from './variableChips'
 import Paper from '@material-ui/core/Paper'
 import Rules from './rules'
 import Diagram from '../diagram/createDiagram'
-//import Diagram from '../diagram/copy'
 import {useParams} from 'react-router-dom'
 import SetVariable from '../../services/setVariable'
 import DeleteVariable from '../../services/deleteVariable'
@@ -17,7 +16,6 @@ import DeleteVariable from '../../services/deleteVariable'
 
 function Create(props) {
     var {id} = useParams();
-    console.log("param unique id: " + id)
     const [variables,setVariables] = useState([])
     const [val, setVal] = useState()
     const [toDelete, setToDelete] = useState(-1)
@@ -29,11 +27,9 @@ function Create(props) {
             "variable": val,
             "idgen": id
         }
-        const result =  await SetVariable(data)
-        console.log(result)
+        await SetVariable(data)
         setVariables(list)
         setVal(val)
-        console.log("Create.js - variables: " + variables)
     }
 
     const wrapperDeleteVariable = async (index) => {
@@ -42,8 +38,7 @@ function Create(props) {
             "idgen": id,
             "index": index
         }
-        let response = await DeleteVariable(data)
-        console.log(response)
+        await DeleteVariable(data)
         list.splice(index,1)
         setVariables(list)
         if(toDelete === index){
@@ -51,14 +46,12 @@ function Create(props) {
         }else{
            setToDelete(index) 
         }
-        
-        console.log("Create.js - variables - after delete " + variables)
     }
 
     const wrapperSetCurrentNode = val => {
         setCurrentNode(val)
     }
-    console.log("M-a apelat din diagram.js: " + currentNode)
+    
     return (
         
         <Grid container>

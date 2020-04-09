@@ -39,8 +39,7 @@ class App extends React.Component {
   async fetchData() {
     const result = await GetList
     this.list = this.setState({ list: result });
-    const representation = await GetByName({ name: "Diabet de tip II" })
-    console.log(representation)
+    await GetByName({ name: "Diabet de tip II" })
   }
 
   componentDidMount() {

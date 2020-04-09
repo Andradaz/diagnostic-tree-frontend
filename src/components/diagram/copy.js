@@ -21,7 +21,6 @@ class Diagram extends React.Component {
 
   fetchData = async () => {
     const result = await GetByName({ name: "Diabet de tip II" })
-    console.log("Rezultat din diagram.js" + (result.data.key.length))
     const resLength = result.data.key.length
     const resultParsed = []
 
@@ -41,10 +40,7 @@ class Diagram extends React.Component {
         linkColor: "#c0cacf"
       })
     }
-
-    console.log("Parsed result: " + JSON.stringify(resultParsed))
     this.setState({ backendData: resultParsed })
-
   }
 
   componentDidMount() {

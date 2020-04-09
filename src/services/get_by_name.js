@@ -8,9 +8,7 @@ var instance = axios.create({
 function promiseGetByName(data){
     return new Promise((resolve, reject) => {
     try{
-        let representationList = instance.post('/representation/getByName', data);
-        resolve(representationList)
-        console.log(representationList)
+        resolve(instance.post('/representation/getByName', data))
     }
     catch(e){
         console.log(`Axios request failed: ${e}`)

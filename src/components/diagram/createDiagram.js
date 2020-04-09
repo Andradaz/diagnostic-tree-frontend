@@ -34,7 +34,6 @@ class Diagram extends React.Component {
         let part = e.subject.part;
         if (part instanceof go.Node) {
             this.props.setCurrentNode(part.data.key);
-            console.log("Am trimis: " + part.data.key)
         }
     }
 
@@ -52,17 +51,11 @@ class Diagram extends React.Component {
         while (linkIt.next()) {
             nr++
             BrotherDecision = linkIt.value.data.text
-            console.log("Brother Decision în while " + BrotherDecision)
         }
 
         if (BrotherDecision === myDecision) {
-            console.log("Aceeasi decizie")
             myDecision = !BrotherDecision
-            console.log("Decizia mea: " + myDecision)
         }
-
-
-        console.log("Din copil pleaca " + nr + "legaturi.")
 
         let parentsIt = node.findNodesInto()
         let parent = ''
@@ -78,14 +71,11 @@ class Diagram extends React.Component {
             }
 
         }
-        console.log("Din parinte pleaca" + nr2 + "legaturi.")
-
 
         if ((nr < 2 && nr2 === 2) || (!parent && nr < 2)) {
             diagram.startTransaction("add node and link");
             // have the Model add the node data
             let newnode = { key: "N", color: '#c0cacf' };
-            console.log(JSON.stringify(newnode))
             diagram.model.addNodeData(newnode);
             // locate the node initially where the parent node is
             diagram.findNodeForData(newnode).location = node.location;
@@ -101,28 +91,13 @@ class Diagram extends React.Component {
             this.setState({
                 nodeDataArray: model.nodeDataArray,
             })
-
-            console.log("state: " + JSON.stringify(this.state))
-            console.log("diagram.JSON: " + JSON.stringify(model))
         } else {
             alert("Arborele trebuie să fie binar!")
         }
-
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        console.log("Diagram model" + diagram.model.toJson())
-        this.setState({ save: diagram.model.toJson() })
-        
-
+        this.setState({ save: diagram.model.toJson() })    
     }
 
     textEdited(e){
-        //e.subject is the Text Block
-        //e.parameter is the original string
-        //e.diagram gets the diagram
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!TEXT EDITED!!!!!!!!!!!!")
-        console.log(e.subject.text)
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!Diagram model!!!!!!!!!!!!")
-        console.log(e.diagram.model.toJson())
         this.setState({save: e.diagram.model.toJson()})
     }
 
@@ -144,9 +119,6 @@ class Diagram extends React.Component {
             diagram.startTransaction("remove node and link");
             diagram.remove(node)
             diagram.commitTransaction("remove node and link");
-            let afterdelete = JSON.parse(diagram.model.toJson())
-            console.log("Dupa stergere: " + JSON.stringify(afterdelete))
-
         } 
 
         diagram.nodeTemplate =
@@ -208,18 +180,12 @@ class Diagram extends React.Component {
     }
 
     async save() {
-        console.log("Id in save:" + this.props.id)
         let data = {
             idgen: this.props.id,
             diagram: this.state.save
         }
-        console.log("Data inainte de save:" + JSON.stringify(data))
-        let result = await setDiagram(data)
-        //Validare date
-        console.log(result)
+        await setDiagram(data)
         this.setState({ open: true })
-
-
     }
 
     handleClose = (event, reason) => {

@@ -10,7 +10,6 @@ function promiseSetRuleOperator(data){
         try{
             let response = instance.post('/diagnostic/setRuleOperator', data)
             resolve(response)
-            console.log(response)
         }
         catch(e){
             console.log(`Axios request failed: ${e}`)

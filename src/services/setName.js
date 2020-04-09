@@ -10,7 +10,6 @@ function promiseSetName(data){
         try{
             let response = instance.post('/diagnostic/setName', data)
             resolve(response)
-            console.log(response)
         }
         catch(e){
             console.log(`Axios request failed: ${e}`)

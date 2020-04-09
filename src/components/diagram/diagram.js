@@ -34,8 +34,6 @@ function initDiagram() {
     while (linkIt.next()) {
       nr++
     }
-    console.log("Din copil pleaca " + nr + "legaturi.")
-
     var parentsIt = node.findNodesInto()
     var parent = ''
     while(parentsIt.next()){
@@ -49,14 +47,11 @@ function initDiagram() {
         nr2++
       }
     }
-    console.log("Din parinte pleaca" + nr2 + "legaturi.")
-
 
     if (nr < 2 && nr2 == 2 || !parent && nr <2) {
       diagram.startTransaction("add node and link");
       // have the Model add the node data
       var newnode = { key: "N" };
-      console.log(JSON.stringify(newnode))
       diagram.model.addNodeData(newnode);
       // locate the node initially where the parent node is
       diagram.findNodeForData(newnode).location = node.location;
@@ -68,8 +63,6 @@ function initDiagram() {
     } else {
       alert("Arborele trebuie să fie binar!")
     }
-
-    console.log("diagram.JSON: " + diagram.model.toJson())
   }
 
   function deleteNodeAndLink(e, b) {

@@ -7,8 +7,7 @@ var instance = axios.create({
 
   let promiseGetList = new Promise((resolve, reject) => {
     try{
-        let diagramList = instance.get('/diagram/list');
-        resolve(diagramList)
+        resolve(instance.get('/diagram/list'))
     }
     catch(e){
         console.log(`Axios request failed: ${e}`)

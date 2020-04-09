@@ -57,11 +57,7 @@ function Rules(props) {
                
                 setSelectItem(JSON.stringify(variable.data))
                 setOperator(JSON.stringify(operator.data))
-                console.log("Variable:" + JSON.stringify(variable))
-                console.log("Parameter:" + JSON.stringify(parameter))
-                console.log("Operator:" + JSON.stringify(operator))
             }
-            console.log("Sunt in fetchdata")
         }
         fetchData();
     }, [props.currentNode])
@@ -75,7 +71,7 @@ function Rules(props) {
         list.push(props.val)
         setSelectItems(list)
     }
-    console.log("selectItems:" + selectItems)
+
     if ((props.delete !== toDelete) && (props.delete !== -2)) {
         setToDelete(props.delete)
         let list
@@ -99,8 +95,7 @@ function Rules(props) {
             "idgen": props.diagramId,
             "idnode": props.currentNode
         }
-        let response = await SetRuleOperator(data)
-        console.log(response)
+        await SetRuleOperator(data)
         setOperator(event.target.value)
     }
 
@@ -110,8 +105,7 @@ function Rules(props) {
             "idgen": props.diagramId,
             "idnode": props.currentNode
         }
-        let response = await SetRuleVariable(data)
-        console.log(response)
+        await SetRuleVariable(data)
         setSelectItem(event.target.value)
     };
 
@@ -125,13 +119,11 @@ function Rules(props) {
             "idgen": props.diagramId,
             "idnode": props.currentNode
         }
-        let response = await SetRuleParameter(data)
-        console.log(response)
+        await SetRuleParameter(data)
     }
 
     if (prevCurrentNode !== props.currentNode) {
         setPrevCurrentNode(props.currentNode)
-        console.log("props.currentNode in Rules: " + props.currentNode)
     }
 
     return (

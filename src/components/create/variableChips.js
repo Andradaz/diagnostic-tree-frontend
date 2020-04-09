@@ -24,7 +24,6 @@ function VariableChips(props) {
         list.push(props.val)
         setChips(list)
     }
-    console.log("cips:" + chips)
 
     const handleDelete = (index)=>{
         var list

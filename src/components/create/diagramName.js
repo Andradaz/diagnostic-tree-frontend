@@ -22,14 +22,12 @@ const saveName = async (name,idgen) => {
             "name": name,
             "idgen": idgen
         }
-        var response = await SetName(data)
-        console.log(response)
+        await SetName(data)
     }
 
 function DiagramName(props) {
     const classes = useStyles()
     const [name, setName] = useState()
-    console.log(props.diagramId)
     
     const handleChange = (event) => {
         setName(event.target.value)

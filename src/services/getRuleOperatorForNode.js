@@ -8,9 +8,7 @@ var instance = axios.create({
 function promiseGetRuleOperatorForNode(data){
     return new Promise((resolve, reject) => {
         try{
-            let response = instance.post('/diagnostic/getRuleOperatorForNode', data)
-            resolve(response)
-            console.log(response)
+            resolve(instance.post('/diagnostic/getRuleOperatorForNode', data))
         }
         catch(e){
             console.log(`Axios request failed: ${e}`)
