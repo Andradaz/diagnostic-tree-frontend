@@ -60,6 +60,7 @@ function Rules(props) {
             }
         }
         fetchData();
+    // eslint-disable-next-line
     }, [props.currentNode])
 
     
