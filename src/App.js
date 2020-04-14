@@ -13,9 +13,9 @@ import {
 import Admin from './components/admin/admin'
 import About from './components/about/about'
 import Diagnostic from './components/diagnostic/diagnostic'
-import GetList from '../src/services/get_list'
-import GetByName from '../src/services/get_by_name'
+import GetList from './services/diagram/get_list'
 import Create from '../src/components/create/create'
+import Edit from '../src/components/admin/edit'
 
 function NavBar(props) {
   const theme = useTheme();
@@ -39,7 +39,6 @@ class App extends React.Component {
   async fetchData() {
     const result = await GetList
     this.list = this.setState({ list: result });
-    await GetByName({ name: "Diabet de tip II" })
   }
 
   componentDidMount() {
@@ -55,6 +54,9 @@ class App extends React.Component {
           <Grid item xs={12}>
             <Switch>
               <Route path="/admin/create/:id" children={<Create/>}/>
+              <Route path="/admin/edit">
+                <Edit/>
+              </Route>
               <Route path="/admin">
                 <Admin />
               </Route>

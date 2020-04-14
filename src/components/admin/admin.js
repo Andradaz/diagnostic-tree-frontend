@@ -82,7 +82,13 @@ function Admin() {
       </Paper>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
-          <CardActionArea component="a" href="#">
+        <Link
+            to='/admin/edit' underline='none'
+            component={RouterLink}
+          >
+          <ButtonBase
+            className={classes.cardAction}
+            focusRipple={true}>
             <Card className={classes.card}>
               <div className={classes.cardDetails}>
                 <CardContent>
@@ -99,7 +105,8 @@ function Admin() {
               </div>
               <CardMedia className={classes.cardMedia} image={edit} title='titlu' />
             </Card>
-          </CardActionArea>
+          </ButtonBase>
+          </Link>
         </Grid>
         <Grid item xs={12} md={6}>
           <Link
@@ -109,7 +116,6 @@ function Admin() {
             <ButtonBase
             className={classes.cardAction}
             focusRipple={true}>
-              {/* <CardActionArea> */}
               <Card className={classes.card}>
                 <div className={classes.cardDetails}>
                   <CardContent>
@@ -127,7 +133,6 @@ function Admin() {
                 <CardMedia className={classes.cardMedia} image={add} title='titlu' />
               </Card>
             </ButtonBase>
-              {/* </CardActionArea> */}
           </Link>   
         </Grid>
         </Grid>

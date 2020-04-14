@@ -8,12 +8,12 @@ import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import InputLabel from '@material-ui/core/InputLabel'
 import TextField from '@material-ui/core/TextField'
-import SetRuleVariable from '../../services/setRuleVariable'
-import SetRuleOperator from '../../services/setRuleOperator'
-import SetRuleParameter from '../../services/setRuleParameter'
-import GetRuleVariableForNode from '../../services/getRuleVariableForNode'
-import GetRuleOperatorForNode from '../../services/getRuleOperatorForNode'
-import GetRuleParameterForNode from '../../services/getRuleParameterForNode'
+import SetRuleVariable from '../../services/diagnostic/setRuleVariable'
+import SetRuleOperator from '../../services/diagnostic/setRuleOperator'
+import SetRuleParameter from '../../services/diagnostic/setRuleParameter'
+import GetRuleVariableForNode from '../../services/diagnostic/getRuleVariableForNode'
+import GetRuleOperatorForNode from '../../services/diagnostic/getRuleOperatorForNode'
+import GetRuleParameterForNode from '../../services/diagnostic/getRuleParameterForNode'
 
 const useStyles = makeStyles(theme => ({
     formControl: {

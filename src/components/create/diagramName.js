@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
-import SetName from '../../services/setName'
+import SetName from '../../services/diagnostic/setName'
 const useStyles = makeStyles(theme => ({
     textField: {
         width: 550,

@@ -10,8 +10,8 @@ import Paper from '@material-ui/core/Paper'
 import Rules from './rules'
 import Diagram from '../diagram/createDiagram'
 import {useParams} from 'react-router-dom'
-import SetVariable from '../../services/setVariable'
-import DeleteVariable from '../../services/deleteVariable'
+import SetVariable from '../../services/diagnostic/setVariable'
+import DeleteVariable from '../../services/diagnostic/deleteVariable'
 
 
 function Create(props) {

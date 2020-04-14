@@ -30,16 +30,22 @@ function Sidemenu(props) {
     return (
       <div className={classes.root}>
         <List component="nav">
-            {props.list.map((obj, index) => (
-            <ListItem button  
-                key={obj._id} 
-                selected = {selectedIndex === obj.index} 
-                onClick={event => handleListItemClick(event, obj.index, obj.link)}
-                component={Link1} to={'/diagnostic/'+ obj.link}
-                TouchRippleProps={{classes: {root: classes.buttonRipple}}}>
-                <ListItemText primary={obj.name} />
-            </ListItem>
-            ))}
+            {props.list.map((obj, index) => {
+              if(obj.published === true){
+                return (
+                  <ListItem button  
+                  key={obj._id} 
+                  selected = {selectedIndex === obj.index} 
+                  onClick={event => handleListItemClick(event, obj.index, obj.link)}
+                  component={Link1} to={'/diagnostic/'+ obj.link}
+                  TouchRippleProps={{classes: {root: classes.buttonRipple}}}>
+                  <ListItemText primary={obj.name} />
+                  </ListItem>
+                )
+              }
+              return(null)
+            }
+            )}
         </List>
       </div>
     );

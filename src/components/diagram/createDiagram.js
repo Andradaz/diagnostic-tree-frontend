@@ -5,7 +5,7 @@ import '../diagram/diagram.css'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import setDiagram from '../../services/setDiagram'
+import setDiagram from '../../services/diagnostic/setDiagram'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
 

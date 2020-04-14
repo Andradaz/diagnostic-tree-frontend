@@ -95,7 +95,7 @@ function AdminPanel() {
               centered
             >
               <Tab value='traseu' label="Traseu principal" {...a11yProps('vizualizeaza')} />
-              <Tab value='complet' label="Diagramă completă" {...a11yProps('editeaza')} />
+              <Tab value='complet' label="Diagrama" {...a11yProps('editeaza')} />
             </Tabs>
           </Paper>
         </Grid>
