@@ -15,7 +15,7 @@ import About from './components/about/about'
 import Diagnostic from './components/diagnostic/diagnostic'
 import GetList from './services/diagram/get_list'
 import Create from '../src/components/create/create'
-import Edit from '../src/components/admin/edit'
+import EditPanel from '../src/components/admin/editpanel'
 
 function NavBar(props) {
   const theme = useTheme();
@@ -36,7 +36,7 @@ class App extends React.Component {
     this.state = { list: [] }
   }
 
-  async fetchData() {
+  fetchData = async () => {
     const result = await GetList
     this.list = this.setState({ list: result });
   }
@@ -55,7 +55,7 @@ class App extends React.Component {
             <Switch>
               <Route path="/admin/create/:id" children={<Create/>}/>
               <Route path="/admin/edit">
-                <Edit/>
+                <EditPanel/>
               </Route>
               <Route path="/admin">
                 <Admin />
