@@ -53,7 +53,7 @@ function SwipeableTemporaryDrawer(props) {
     >
       <List>
         {props.list.map((obj, index) => (
-          <ListItem button component={Link1} to={obj.link} key={obj._id}>
+          <ListItem button component={Link1} to={obj.idgen} key={obj._id}>
             <ListItemIcon><ArrowForwardIosIcon /></ListItemIcon>
             <ListItemText primary={obj.name} />
           </ListItem>

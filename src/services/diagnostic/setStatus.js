@@ -8,8 +8,6 @@ var instance = axios.create({
 function promiseSetStatus(data){
     return new Promise((resolve,reject)=>{
         try{
-            console.log("data in service function")
-            console.log(data)
             resolve(instance.post('/diagnostic/setStatus', data))
         }
         catch(e){

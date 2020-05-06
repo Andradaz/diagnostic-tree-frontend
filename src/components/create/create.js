@@ -20,6 +20,11 @@ function Create(props) {
     const [val, setVal] = useState()
     const [toDelete, setToDelete] = useState(-1)
     const [currentNode, setCurrentNode] = useState(0)
+
+    // useEffect(() => {
+    //     loadDataOnlyOnce();
+    //   }, []);
+
     const wrapperAddVariable = async (val) => {
         var list = variables
         list.push(val)

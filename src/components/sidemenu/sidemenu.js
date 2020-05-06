@@ -35,9 +35,9 @@ function Sidemenu(props) {
                 return (
                   <ListItem button  
                   key={obj._id} 
-                  selected = {selectedIndex === obj.index} 
-                  onClick={event => handleListItemClick(event, obj.index, obj.link)}
-                  component={Link1} to={'/diagnostic/'+ obj.link}
+                  selected = {selectedIndex === index} 
+                  onClick={event => handleListItemClick(event, index, obj.idgen)}
+                  component={Link1} to={'/diagnostic/'+ obj.idgen}
                   TouchRippleProps={{classes: {root: classes.buttonRipple}}}>
                   <ListItemText primary={obj.name} />
                   </ListItem>

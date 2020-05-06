@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import setDiagram from '../../services/diagnostic/setDiagram'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
+import setStatus from '../../services/diagnostic/setStatus'
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -20,7 +21,8 @@ class Diagram extends React.Component {
             nodeDataArray: [{ key: "Alpha", color: '#c0cacf',name: "Nod1" }],
             linkDataArray: [],
             save: {},
-            open: false
+            open: false,
+            open1:false
         }
         this.initDiagram = this.initDiagram.bind(this)
         this.addNodeAndLink = this.addNodeAndLink.bind(this)
@@ -195,6 +197,21 @@ class Diagram extends React.Component {
         this.setState({ open: false })
     };
 
+    redirect  = () => {
+        window.location.href = 'http://localhost:3001/diagnostic'
+    }
+
+    onClickSetStatus = async (idgen, status) => {
+        let booleanStatus = (status === 'true')
+        let data = {
+            id: idgen,
+            status: booleanStatus
+        }
+        await setStatus(data)
+        this.setState({ open1: true })
+        setTimeout(this.redirect,3000)
+    };
+
     render() {
         return (
             <Grid>
@@ -213,7 +230,7 @@ class Diagram extends React.Component {
                         </Button>
                     </Grid>
                     <Grid item>
-                        <Button variant="contained" color='primary' disapletypography='true'>
+                        <Button variant="contained" color='primary' disapletypography='true' onClick={() =>this.onClickSetStatus(this.props.id, 'true')}>
                             <Typography>
                                 {/* pun intr-un json in backend numele diagramei si id-ul, apoi cand randez
                         meniul il randez folosesc jsonul respectiv  */}
@@ -225,6 +242,11 @@ class Diagram extends React.Component {
                 <Snackbar open={this.state.open} autoHideDuration={3000} onClose={this.handleClose}>
                     <Alert onClose={this.handleClose} severity="success">
                         Diagrama a fost salvată!
+                    </Alert>
+                </Snackbar>
+                <Snackbar open={this.state.open1} autoHideDuration={3000} onClose={this.handleClose}>
+                    <Alert onClose={this.handleClose} severity="success">
+                        Diagrama a fost publicată!
                     </Alert>
                 </Snackbar>
             </Grid>

@@ -61,6 +61,7 @@ class EditPanel extends React.Component {
                 <div className={classes.root}>
                     {
                         this.state.list.map((obj, index) => {
+                            console.log(obj.idgen)
                             if (obj.published === true) {
                                 return (
                                     <ExpansionPanel
@@ -109,7 +110,7 @@ class EditPanel extends React.Component {
                                                         <Button>Editeaza</Button>
                                                     </Grid>
                                                     <Grid item container xs={4} justify="center">
-                                                        <Button variant='contained' color="primary" onClick={() => this.onClickSetStatus(obj.name, 'true')}>Publica</Button>
+                                                        <Button variant='contained' color="primary" onClick={() => this.onClickSetStatus(obj.idgen, 'true')}>Publica</Button>
                                                     </Grid>
                                                 </Grid>
                                             </Grid>
