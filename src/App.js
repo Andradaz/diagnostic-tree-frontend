@@ -13,7 +13,7 @@ import {
 import Admin from './components/admin/admin'
 import About from './components/about/about'
 import Diagnostic from './components/diagnostic/diagnostic'
-import GetList from './services/diagram/get_list'
+import GetList from './services/diagnostic/getList'
 import Create from '../src/components/create/create'
 import EditPanel from '../src/components/admin/editpanel'
 
@@ -38,7 +38,7 @@ class App extends React.Component {
 
   fetchData = async () => {
     const result = await GetList
-    this.list = this.setState({ list: result });
+    this.list = this.setState({ list: result })
   }
 
   componentDidMount() {

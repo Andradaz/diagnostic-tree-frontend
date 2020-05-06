@@ -1,5 +1,5 @@
 import React from 'react'
-import GetList from '../../services/diagram/get_list'
+import GetList from '../../services/diagnostic/getList'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/styles'
 import Container from '@material-ui/core/Container'
@@ -10,7 +10,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import setStatus from '../../services/diagram/setStatus'
+import setStatus from '../../services/diagnostic/setStatus'
 
 const styles = theme => ({
     root: {
@@ -41,10 +41,10 @@ class EditPanel extends React.Component {
         this.fetchData();
     }
 
-    onClickSetStatus = async (name, status) => {
+    onClickSetStatus = async (idgen, status) => {
         let booleanStatus = (status === 'true')
         let data = {
-            name: name,
+            id: idgen,
             status: booleanStatus
         }
         await setStatus(data)
@@ -64,7 +64,7 @@ class EditPanel extends React.Component {
                             if (obj.published === true) {
                                 return (
                                     <ExpansionPanel
-                                        key={obj.index}>
+                                        key={obj._id}>
                                         <ExpansionPanelSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel1a-content"
@@ -80,7 +80,7 @@ class EditPanel extends React.Component {
                                                         <Button>Editeaza</Button>
                                                     </Grid>
                                                     <Grid item container xs={4} justify="center">
-                                                        <Button color="secondary" onClick={() =>this.onClickSetStatus(obj.name, 'false')}>Anuleaza Publicarea</Button>
+                                                        <Button color="secondary" onClick={() =>this.onClickSetStatus(obj.idgen, 'false')}>Anuleaza Publicarea</Button>
                                                     </Grid>
                                                 </Grid>
                                             </Grid>
@@ -93,7 +93,7 @@ class EditPanel extends React.Component {
                             } else {
                                 return (
                                     <ExpansionPanel
-                                        key={obj.index}>
+                                        key={obj._id}>
                                         <ExpansionPanelSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel1a-content"
