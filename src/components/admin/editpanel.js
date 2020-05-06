@@ -1,6 +1,6 @@
 import React from 'react'
 import GetList from '../../services/diagram/get_list'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/styles'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
