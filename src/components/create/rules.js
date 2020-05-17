@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
@@ -11,9 +11,13 @@ import TextField from '@material-ui/core/TextField'
 import SetRuleVariable from '../../services/diagnostic/setRuleVariable'
 import SetRuleOperator from '../../services/diagnostic/setRuleOperator'
 import SetRuleParameter from '../../services/diagnostic/setRuleParameter'
+import SetRuleError from '../../services/diagnostic/setRuleError'
 import GetRuleVariableForNode from '../../services/diagnostic/getRuleVariableForNode'
 import GetRuleOperatorForNode from '../../services/diagnostic/getRuleOperatorForNode'
 import GetRuleParameterForNode from '../../services/diagnostic/getRuleParameterForNode'
+import GetRuleErrorForNode from '../../services/diagnostic/getRuleErrorForNode'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -36,6 +40,7 @@ function Rules(props) {
     const [toDelete, setToDelete] = React.useState(-1)
     const [operator, setOperator] = React.useState(10)
     const [param, setParam] = React.useState()
+    const [error, setError] = React.useState(false)
 
     useEffect(() => {
         //facem fetchData doar daca avem selectat un nod
@@ -51,19 +56,28 @@ function Rules(props) {
                 let variable = await GetRuleVariableForNode(data)
                 let parameter = await GetRuleParameterForNode(data)
                 let operator = await GetRuleOperatorForNode(data)
-                if(JSON.stringify(parameter.data) !== "not defined"){
-                     setParam(JSON.stringify(parameter.data))
+                let error = await GetRuleErrorForNode(data)
+
+                if (JSON.stringify(parameter.data) !== "not defined") {
+                    setParam(JSON.stringify(parameter.data))
                 }
-               
+                if (JSON.stringify(error.data) !== "not defined" && error.data != null) {
+                    console.log("am setat:")
+                    console.log(error.data)
+                    setError(error.data)
+                } else {
+                    setError(false)
+                }
                 setSelectItem(JSON.stringify(variable.data))
                 setOperator(JSON.stringify(operator.data))
+
             }
         }
         fetchData();
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [props.currentNode])
 
-    
+
 
     if (prevVal !== props.val) {
         setPrevVal(props.val)
@@ -123,77 +137,113 @@ function Rules(props) {
         await SetRuleParameter(data)
     }
 
+    const handleChangeCheckbox = async (event) => {
+        let eventError = event.target.checked
+        let data = {
+            "error": eventError,
+            "idgen": props.diagramId,
+            "idnode": props.currentNode
+        }
+        await SetRuleError(data)
+        setError(eventError);
+        console.log("Acesta este event target checked")
+        console.log(eventError)
+    };
+
     if (prevCurrentNode !== props.currentNode) {
         setPrevCurrentNode(props.currentNode)
     }
 
-    return (
-        <Grid container>
-            <Grid item xs={12}>
-                <Typography variant='subtitle1'>
-                    <Box pl={3} pt={3}>
-                        Reguli
-                    </Box>
-                </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <Box pl={3}>
-                    <Typography variant='body2'>
-                        Prima regulă*
+    if (props.currentNode !== 0) {
+        return (
+            <Grid container>
+                <Grid item xs={12}>
+                    <Typography variant='subtitle1'>
+                        <Box pl={3} pt={3}>
+                            Reguli
+                        </Box>
                     </Typography>
-                </Box>
+                </Grid>
+                <Grid item xs={12}>
+                    <Box pl={3}>
+                        <Typography variant='body2'>
+                            Prima regulă*
+                        </Typography>
+                    </Box>
+                </Grid>
+                <Grid item xs={12}>
+                    <Box pl={3}>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="variabila" color='secondary'>Variabila</InputLabel>
+                            <Select
+                                color='secondary'
+                                labelId="variabila"
+                                id="variabila1"
+                                value={selectItem}
+                                onChange={handleChange}
+                            >
+                                {selectItems.map((obj, index) =>
+                                    <MenuItem value={index} key={index}>{obj}</MenuItem>
+                                )}
+                            </Select>
+                        </FormControl>
+                    </Box>
+                </Grid>
+                <Grid item xs={12}>
+                    <Box pl={3}>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="operator" color='secondary'>Operator</InputLabel>
+                            <Select
+                                color='secondary'
+                                labelId="operator"
+                                id="operator1"
+                                value={operator}
+                                onChange={handleChangeOp}
+                            >
+                                <MenuItem value={10}>Mai mare</MenuItem>
+                                <MenuItem value={20}>Mai mic</MenuItem>
+                                <MenuItem value={30}>Egal</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                </Grid>
+                <Grid item xs={12}>
+                    <Box pl={4} pb={2}>
+                        <form className={classes.root} noValidate autoComplete="off">
+                            <TextField
+                                id="parametru"
+                                value={param || ''}
+                                label="Parametru"
+                                color='secondary'
+                                onChange={handleChangeParam}
+                                onBlur={paramOnBlur} />
+                        </form>
+                    </Box>
+                </Grid>
+                <Grid item xs={12}>
+                    <Box pl={3}>
+                        <FormControlLabel
+                            control={<Checkbox checked={error} onChange={handleChangeCheckbox} />}
+                            label="Nod eroare"
+                        />
+                    </Box>
+                </Grid>
+
             </Grid>
-            <Grid item xs={12}>
-                <Box pl={3}>
-                    <FormControl className={classes.formControl}>
-                        <InputLabel id="variabila" color='secondary'>Variabila</InputLabel>
-                        <Select
-                            color='secondary'
-                            labelId="variabila"
-                            id="variabila1"
-                            value={selectItem}
-                            onChange={handleChange}
-                        >
-                            {selectItems.map((obj, index) =>
-                                <MenuItem value={index} key={index}>{obj}</MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
-                </Box>
+        );
+    }else{
+        return(
+            <Grid container>
+                <Grid item xs={12}>
+                    <Box p={9}>
+                        Selectează un nod pentru a seta o regulă.
+                    </Box>
+                    
+                </Grid>
             </Grid>
-            <Grid item xs={12}>
-                <Box pl={3}>
-                    <FormControl className={classes.formControl}>
-                        <InputLabel id="operator" color='secondary'>Operator</InputLabel>
-                        <Select
-                            color='secondary'
-                            labelId="operator"
-                            id="operator1"
-                            value={operator}
-                            onChange={handleChangeOp}
-                        >
-                            <MenuItem value={10}>Mai mare</MenuItem>
-                            <MenuItem value={20}>Mai mic</MenuItem>
-                            <MenuItem value={30}>Egal</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Box>
-            </Grid>
-            <Grid item xs={12}>
-                <Box pl={4} pb={2}>
-                    <form className={classes.root} noValidate autoComplete="off">
-                        <TextField
-                            id="parametru"
-                            value={param || ''}
-                            label="Parametru"
-                            color='secondary'
-                            onChange={handleChangeParam}
-                            onBlur={paramOnBlur} />
-                    </form>
-                </Box>
-            </Grid>
-        </Grid>
-    );
+        )
+    }
+
 }
 
 export default Rules

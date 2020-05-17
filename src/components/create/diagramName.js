@@ -2,19 +2,22 @@ import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 import SetName from '../../services/diagnostic/setName'
+
 const useStyles = makeStyles(theme => ({
     textField: {
         width: 550,
         margin: 10,
     },
     resize: {
-        fontSize: 25,
-        color: '#41d0b3'
+        fontSize: 20,
+        color: '#78e1ff'
     },
     labelRoot: {
-        fontSize: 25,
+        fontSize: 17,
     },
-    labelFocused: {},
+    labelFocused: {
+        fontSize: 17
+    },
 }));
 
 const saveName = async (name,idgen) => {
@@ -49,7 +52,7 @@ function DiagramName(props) {
                         focused: classes.labelFocused
                     }
                 }}
-                label='Numele diagramei'
+                label='Denumire'
                 color='secondary'
                 onChange={handleChange}
                 onBlur={function(){ return saveName(name,props.diagramId)}} />

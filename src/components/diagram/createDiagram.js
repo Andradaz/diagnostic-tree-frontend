@@ -22,7 +22,8 @@ class Diagram extends React.Component {
             linkDataArray: [],
             save: {},
             open: false,
-            open1:false
+            open1:false,
+            type: 2,
         }
         this.initDiagram = this.initDiagram.bind(this)
         this.addNodeAndLink = this.addNodeAndLink.bind(this)

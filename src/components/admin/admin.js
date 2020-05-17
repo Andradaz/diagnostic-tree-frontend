@@ -12,6 +12,7 @@ import add from './add-secondary.svg'
 import { Link as RouterLink } from 'react-router-dom'
 import Link from '@material-ui/core/Link'
 import ButtonBase from '@material-ui/core/ButtonBase'
+import Background from '../../images/blue.jpg'
 
 const useStyles = makeStyles(theme => ({
   mainFeaturedPost: {
@@ -63,7 +64,7 @@ function Admin() {
   const classes = useStyles();
   return (
     <Container maxWidth="xl">
-      <Paper className={classes.mainFeaturedPost} style={{ backgroundImage: 'url(https://images.fineartamerica.com/images-medium-large-5/soft-blue-gradient-white-light-background-kikkalek5050.jpg)' }}>
+      <Paper className={classes.mainFeaturedPost} style={ {backgroundImage: `url(${Background})` }}>
         <div className={classes.overlay} />
         <Grid container>
           <Grid item md={6}>

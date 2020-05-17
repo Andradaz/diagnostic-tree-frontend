@@ -8,10 +8,12 @@ import 'typeface-roboto'
 
 const theme = createMuiTheme({
     palette: {
-        primary: { main: '#b1f2e5' },
-        secondary: { main: '#41d0b3' },
-        action: { selected: '#b1f2e5',
-                   hover: '#dcf2ee'},
+        //#41d0b3 green
+        //#dcf2ee
+        primary: { main: '#78e1ff' },
+        secondary: { main: '#78e1ff' },
+        action: { selected: '#78e1ff',
+                   hover: '#c9f3ff'},
       },
       typography: { useNextVariants: true }
   });
