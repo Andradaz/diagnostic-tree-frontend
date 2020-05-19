@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect } from 'react'
 import Paper from '@material-ui/core/Paper'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -8,6 +8,7 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
+import GetVariableList from '../../services/diagnostic/getVariableList'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,9 +20,10 @@ const useStyles = makeStyles(theme => ({
   form: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
-      width: 200,
+      width: 300,
     }
-  }
+  },
+
 }));
 
 function TabPanel(props) {
@@ -54,13 +56,27 @@ function a11yProps(index) {
   };
 }
 
-function AdminPanel() {
+function AdminPanel(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState('traseu');
+  const [variableList, setVariableList] = React.useState([])
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      let data = {
+        "idgen": props.diagramId
+      }
+      let list = await GetVariableList(data)
+      setVariableList(list.data)
+      console.log(variableList)
+    }
+    fetchData();
+    // eslint-disable-next-line
+}, [props.diagramId])
 
   return (
     <Grid container>
@@ -68,16 +84,15 @@ function AdminPanel() {
         <Grid item xs={12}>
           <Box pt={1}>
             <form className={classes.form} noValidate autoComplete="off">
-              {[{ text: 'HbA1C', id: '1' }, { text: 'HbA1C', id: '2' }, { text: 'HbA1C', id: '3' }, { text: 'HbA1C', id: '4' },
-              { text: 'HbA1C', id: '5' }, { text: 'HbA1C', id: '6' }].map((obj, index) => (
+              {variableList.map((obj, index) => (
                 <TextField
-                  label={obj.text}
-                  id={obj.id}
+                  label={obj}
+                  id={index.toString()}
                   defaultValue={obj.text}
                   variant="outlined"
                   margin="dense"
                   color="secondary"
-                  key={obj.id}
+                  key={index}
                 />
               ))}
 

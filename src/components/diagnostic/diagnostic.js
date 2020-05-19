@@ -7,12 +7,13 @@ import View from './view'
 
 function Content(props) {
 
-  const [diagramTracking, setDiagramTracking] = useState('d1')
+  const [diagramTracking, setDiagramTracking] = useState('KABF9VUMBKT')
   const wrapperSetDiagramTraking = val => {
     setDiagramTracking(val)
   }
 
   const theme = useTheme();
+
   if (useMediaQuery(theme.breakpoints.up('md'))) {
     return (
       <Grid container spacing={1}>
@@ -23,7 +24,7 @@ function Content(props) {
           <div>
             {/* pe ce diagrama sunt */}
             {diagramTracking}
-            <View />
+            <View diagramId = {diagramTracking}/>
             {/* <Diagram content={diagramTracking === 'undefined' ? 'd1' : diagramTracking}/> */}
           </div>
         </Grid>
