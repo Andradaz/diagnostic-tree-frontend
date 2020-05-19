@@ -9,20 +9,22 @@ import setDiagram from '../../services/diagnostic/setDiagram'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
 import setStatus from '../../services/diagnostic/setStatus'
+import getRuleErrorForNode from '../../services/diagnostic/getRuleErrorForNode'
+import getRuleSolutionForNode from '../../services/diagnostic/getRuleSolutionForNode'
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
-  }
+}
 
 class Diagram extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            nodeDataArray: [{ key: "Alpha", color: '#c0cacf',name: "Nod1" }],
+            nodeDataArray: [{ key: "N", color: '#c0cacf', name: "Nod1" }],
             linkDataArray: [],
             save: {},
             open: false,
-            open1:false,
+            open1: false,
             type: 2,
         }
         this.initDiagram = this.initDiagram.bind(this)
@@ -31,6 +33,7 @@ class Diagram extends React.Component {
         this.save = this.save.bind(this)
         this.handleClose = this.handleClose.bind(this)
         this.textEdited = this.textEdited.bind(this)
+        this.backgroundSingleClicked = this.backgroundSingleClicked.bind(this)
     }
 
     onNodeClick(e) {
@@ -40,14 +43,20 @@ class Diagram extends React.Component {
         }
     }
 
+    backgroundSingleClicked(e) {
+        //when background clicked, do not show any rules
+        this.props.setCurrentNode(0)
+    }
 
-    addNodeAndLink(e, b) {
+
+    async addNodeAndLink(e, b) {
         // take a button panel in an Adornment, get its Adornment, and then get its adorned Node
         let node = b.part.adornedPart;
         // we are modifying the model, so conduct a transaction
         let diagram = node.diagram;
         let linkIt = node.findLinksOutOf()
         let nr = 0;
+
 
         let BrotherDecision = true
         let myDecision = true
@@ -75,33 +84,46 @@ class Diagram extends React.Component {
 
         }
 
-        if ((nr < 2 && nr2 === 2) || (!parent && nr < 2)) {
-            diagram.startTransaction("add node and link");
-            // have the Model add the node data
-            let newnode = { key: "N", color: '#c0cacf' };
-            diagram.model.addNodeData(newnode);
-            // locate the node initially where the parent node is
-            diagram.findNodeForData(newnode).location = node.location;
-            // and then add a link data connecting the original node with the new one
-            let newlink = { from: node.data.key, to: newnode.key };
-            diagram.model.addLinkData(newlink);
-            let newlinkObject = diagram.findLinkForData(newlink)
-
-            diagram.model.setDataProperty(newlinkObject.data, "text", myDecision)
-            // finish the transaction -- will automatically perform a layout
-            diagram.commitTransaction("add node and link");
-            let model = JSON.parse(diagram.model.toJson())
-            this.setState({
-                nodeDataArray: model.nodeDataArray,
-            })
-        } else {
-            alert("Arborele trebuie să fie binar!")
+        let data = {
+            "idgen": this.props.id,
+            "idnode": node.data.key
         }
-        this.setState({ save: diagram.model.toJson() })    
+
+        let isErrorNode = await getRuleErrorForNode(data)
+        let isSolutionNode = await getRuleSolutionForNode(data)
+        //adding a new node conditionally
+        if (isErrorNode.data || isSolutionNode.data) {
+            alert("Nu poti adauga un copil unui nod setat ca fiind terminal!")
+        } else {
+            if ((nr < 2 && nr2 === 2) || (!parent && nr < 2)) {
+                diagram.startTransaction("add node and link");
+                // have the Model add the node data
+                let newnode = { key: "N", color: '#c0cacf' };
+                diagram.model.addNodeData(newnode);
+                // locate the node initially where the parent node is
+                diagram.findNodeForData(newnode).location = node.location;
+                // and then add a link data connecting the original node with the new one
+                let newlink = { from: node.data.key, to: newnode.key };
+                diagram.model.addLinkData(newlink);
+                let newlinkObject = diagram.findLinkForData(newlink)
+
+                diagram.model.setDataProperty(newlinkObject.data, "text", myDecision)
+                // finish the transaction -- will automatically perform a layout
+                diagram.commitTransaction("add node and link");
+                let model = JSON.parse(diagram.model.toJson())
+                this.setState({
+                    nodeDataArray: model.nodeDataArray,
+                })
+            } else {
+                alert("Arborele trebuie să fie binar!")
+            }
+        }
+
+        this.setState({ save: diagram.model.toJson() })
     }
 
-    textEdited(e){
-        this.setState({save: e.diagram.model.toJson()})
+    textEdited(e) {
+        this.setState({ save: e.diagram.model.toJson() })
     }
 
     initDiagram() {
@@ -122,7 +144,7 @@ class Diagram extends React.Component {
             diagram.startTransaction("remove node and link");
             diagram.remove(node)
             diagram.commitTransaction("remove node and link");
-        } 
+        }
 
         diagram.nodeTemplate =
             $(go.Node, "Auto",
@@ -174,8 +196,9 @@ class Diagram extends React.Component {
                 )
             );
 
-        diagram.addDiagramListener("ObjectSingleClicked", this.onNodeClick);
+        diagram.addDiagramListener("ObjectSingleClicked", this.onNodeClick)
         diagram.addDiagramListener("TextEdited", this.textEdited)
+        diagram.addDiagramListener("BackgroundSingleClicked", this.backgroundSingleClicked)
 
         let model = $(go.GraphLinksModel)
         diagram.model = model
@@ -198,7 +221,7 @@ class Diagram extends React.Component {
         this.setState({ open: false })
     };
 
-    redirect  = () => {
+    redirect = () => {
         window.location.href = 'http://localhost:3001/diagnostic'
     }
 
@@ -210,7 +233,7 @@ class Diagram extends React.Component {
         }
         await setStatus(data)
         this.setState({ open1: true })
-        setTimeout(this.redirect,3000)
+        setTimeout(this.redirect, 3000)
     };
 
     render() {
@@ -231,7 +254,7 @@ class Diagram extends React.Component {
                         </Button>
                     </Grid>
                     <Grid item>
-                        <Button variant="contained" color='primary' disapletypography='true' onClick={() =>this.onClickSetStatus(this.props.id, 'true')}>
+                        <Button variant="contained" color='primary' disapletypography='true' onClick={() => this.onClickSetStatus(this.props.id, 'true')}>
                             <Typography>
                                 {/* pun intr-un json in backend numele diagramei si id-ul, apoi cand randez
                         meniul il randez folosesc jsonul respectiv  */}

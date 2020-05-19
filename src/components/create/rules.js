@@ -12,12 +12,14 @@ import SetRuleVariable from '../../services/diagnostic/setRuleVariable'
 import SetRuleOperator from '../../services/diagnostic/setRuleOperator'
 import SetRuleParameter from '../../services/diagnostic/setRuleParameter'
 import SetRuleError from '../../services/diagnostic/setRuleError'
+import SetRuleSolution from '../../services/diagnostic/setRuleSolution'
 import GetRuleVariableForNode from '../../services/diagnostic/getRuleVariableForNode'
 import GetRuleOperatorForNode from '../../services/diagnostic/getRuleOperatorForNode'
 import GetRuleParameterForNode from '../../services/diagnostic/getRuleParameterForNode'
 import GetRuleErrorForNode from '../../services/diagnostic/getRuleErrorForNode'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import GetRuleSolutionForNode from '../../services/diagnostic/getRuleSolutionForNode'
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -41,6 +43,10 @@ function Rules(props) {
     const [operator, setOperator] = React.useState(10)
     const [param, setParam] = React.useState()
     const [error, setError] = React.useState(false)
+    const [disableError, setDisableError] = React.useState(false)
+    const [solution, setSolution] = React.useState(false)
+    const [disableSolution, setDisableSolution] = React.useState(false)
+    const [disableRules, setDisableRules] = React.useState(false)
 
     useEffect(() => {
         //facem fetchData doar daca avem selectat un nod
@@ -56,17 +62,35 @@ function Rules(props) {
                 let variable = await GetRuleVariableForNode(data)
                 let parameter = await GetRuleParameterForNode(data)
                 let operator = await GetRuleOperatorForNode(data)
-                let error = await GetRuleErrorForNode(data)
+                let err = await GetRuleErrorForNode(data)
+                let sol = await GetRuleSolutionForNode(data)
 
+                setDisableRules(false)
+                setDisableSolution(false)
+                setDisableError(false)
                 if (JSON.stringify(parameter.data) !== "not defined") {
                     setParam(JSON.stringify(parameter.data))
                 }
-                if (JSON.stringify(error.data) !== "not defined" && error.data != null) {
-                    console.log("am setat:")
-                    console.log(error.data)
-                    setError(error.data)
+                if (JSON.stringify(err.data) !== "not defined" && err.data != null) {
+                    //True sau False in functie de ce gaseste in bd
+                    setError(err.data)
                 } else {
+                    //Fals pentru ca a gasit not defined sau null
                     setError(false)
+                }
+                if (JSON.stringify(sol.data) !== "not defined" && sol.data != null) {
+                    setSolution(sol.data)
+                } else {
+                    setSolution(false)
+                }
+
+                if(sol.data === true){
+                    setDisableError(true)
+                    setDisableRules(true)
+                }
+                if(err.data === true){
+                    setDisableRules(true)
+                    setDisableSolution(true)
                 }
                 setSelectItem(JSON.stringify(variable.data))
                 setOperator(JSON.stringify(operator.data))
@@ -137,17 +161,40 @@ function Rules(props) {
         await SetRuleParameter(data)
     }
 
-    const handleChangeCheckbox = async (event) => {
-        let eventError = event.target.checked
-        let data = {
-            "error": eventError,
-            "idgen": props.diagramId,
-            "idnode": props.currentNode
-        }
-        await SetRuleError(data)
-        setError(eventError);
-        console.log("Acesta este event target checked")
-        console.log(eventError)
+    const handleChangeError = async (event) => {
+            let eventError = event.target.checked
+            let data = {
+                "error": eventError,
+                "idgen": props.diagramId,
+                "idnode": props.currentNode
+            }
+            await SetRuleError(data)
+            setError(eventError);
+            if(eventError === true){
+                setDisableSolution(true) 
+                setDisableRules(true)
+            }else{
+                setDisableSolution(false)
+                setDisableRules(false)  
+            }
+    };
+
+    const handleChangeSolution = async (event) => {
+        let eventSolution = event.target.checked
+            let data = {
+                "solution": eventSolution,
+                "idgen": props.diagramId,
+                "idnode": props.currentNode
+            }
+            await SetRuleSolution(data)
+            setSolution(eventSolution);
+            if(eventSolution === true){
+                setDisableError(true)
+                setDisableRules(true) 
+            }else{
+                setDisableError(false)
+                setDisableRules(false) 
+            }
     };
 
     if (prevCurrentNode !== props.currentNode) {
@@ -160,14 +207,14 @@ function Rules(props) {
                 <Grid item xs={12}>
                     <Typography variant='subtitle1'>
                         <Box pl={3} pt={3}>
-                            Reguli
+                            Proprietățile nodului selectat
                         </Box>
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <Box pl={3}>
                         <Typography variant='body2'>
-                            Prima regulă*
+                            Regula*
                         </Typography>
                     </Box>
                 </Grid>
@@ -181,6 +228,7 @@ function Rules(props) {
                                 id="variabila1"
                                 value={selectItem}
                                 onChange={handleChange}
+                                disabled ={disableRules}
                             >
                                 {selectItems.map((obj, index) =>
                                     <MenuItem value={index} key={index}>{obj}</MenuItem>
@@ -199,6 +247,7 @@ function Rules(props) {
                                 id="operator1"
                                 value={operator}
                                 onChange={handleChangeOp}
+                                disabled ={disableRules}
                             >
                                 <MenuItem value={10}>Mai mare</MenuItem>
                                 <MenuItem value={20}>Mai mic</MenuItem>
@@ -211,6 +260,7 @@ function Rules(props) {
                     <Box pl={4} pb={2}>
                         <form className={classes.root} noValidate autoComplete="off">
                             <TextField
+                                disabled ={disableRules}
                                 id="parametru"
                                 value={param || ''}
                                 label="Parametru"
@@ -222,23 +272,38 @@ function Rules(props) {
                 </Grid>
                 <Grid item xs={12}>
                     <Box pl={3}>
+                        <Typography variant='body2'>
+                            Dacă nodul este unul terminal, selectează tipul său <br></br>(Eroare sau Soluție)
+                        </Typography>
+                    </Box>
+                </Grid>
+                <Grid item xs={12}>
+                    <Box pl={3}>
                         <FormControlLabel
-                            control={<Checkbox checked={error} onChange={handleChangeCheckbox} />}
+                            control={<Checkbox disabled={disableError} checked={error} onChange={handleChangeError} />}
                             label="Nod eroare"
+                        />
+                    </Box>
+                </Grid>
+                <Grid item xs={12}>
+                    <Box pl={3}>
+                        <FormControlLabel
+                            control={<Checkbox disabled={disableSolution} checked={solution} onChange={handleChangeSolution} />}
+                            label="Nod solutie"
                         />
                     </Box>
                 </Grid>
 
             </Grid>
         );
-    }else{
-        return(
+    } else {
+        return (
             <Grid container>
                 <Grid item xs={12}>
                     <Box p={9}>
                         Selectează un nod pentru a seta o regulă.
                     </Box>
-                    
+
                 </Grid>
             </Grid>
         )

@@ -61,7 +61,6 @@ class EditPanel extends React.Component {
                 <div className={classes.root}>
                     {
                         this.state.list.map((obj, index) => {
-                            console.log(obj.idgen)
                             if (obj.published === true) {
                                 return (
                                     <ExpansionPanel
