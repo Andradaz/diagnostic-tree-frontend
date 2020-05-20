@@ -1,4 +1,4 @@
-import React, {useEffect } from 'react'
+import React, { useEffect } from 'react'
 // import Paper from '@material-ui/core/Paper'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -60,7 +60,7 @@ function AdminPanel(props) {
   const classes = useStyles();
   //const [value, setValue] = React.useState('traseu');
   const [variableList, setVariableList] = React.useState([])
-
+  const [inputs, setInputs] = React.useState({})
   // const handleChange = (event, newValue) => {
   //   setValue(newValue);
   // };
@@ -76,7 +76,12 @@ function AdminPanel(props) {
     }
     fetchData();
     // eslint-disable-next-line
-}, [props.diagramId])
+  }, [props.diagramId])
+
+  const handleChange = (e) => {
+    setInputs({ ...inputs, [e.target.id]: e.target.value });
+    console.log(inputs)
+  }
 
   return (
     <Grid container>
@@ -93,6 +98,9 @@ function AdminPanel(props) {
                   margin="dense"
                   color="secondary"
                   key={index}
+                  name={obj.text}
+                  type="number"
+                  onClick={(e) => {handleChange(e)}}
                 />
               ))}
 
@@ -123,8 +131,8 @@ function AdminPanel(props) {
           Diagrama completa
         </TabPanel>
       </Grid> */}
-      <Grid item xs = {12}>
-          Diagrama
+      <Grid item xs={12}>
+        Diagrama
       </Grid>
 
     </Grid>
