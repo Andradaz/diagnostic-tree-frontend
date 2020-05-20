@@ -4,6 +4,7 @@ import Sidemenu from '../sidemenu/sidemenu'
 import { useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import View from './view'
+import Diagram from '../diagnostic/diagram'
 
 function Content(props) {
 
@@ -25,7 +26,7 @@ function Content(props) {
             {/* pe ce diagrama sunt */}
             {diagramTracking}
             <View diagramId = {diagramTracking}/>
-            {/* <Diagram content={diagramTracking === 'undefined' ? 'd1' : diagramTracking}/> */}
+              <Diagram idgen={diagramTracking}/>
           </div>
         </Grid>
       </Grid>

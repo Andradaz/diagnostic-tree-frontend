@@ -250,7 +250,7 @@ function Rules(props) {
                                 disabled ={disableRules}
                             >
                                 <MenuItem value={10}>Mai mare</MenuItem>
-                                <MenuItem value={20}>Mai mic</MenuItem>
+                                <MenuItem value={20}>Mai mic sau egal</MenuItem>
                                 <MenuItem value={30}>Egal</MenuItem>
                             </Select>
                         </FormControl>

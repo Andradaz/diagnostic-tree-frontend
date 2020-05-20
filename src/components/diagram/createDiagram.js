@@ -143,6 +143,7 @@ class Diagram extends React.Component {
             var diagram = node.diagram;
             diagram.startTransaction("remove node and link");
             diagram.remove(node)
+            diagram.model.removeNodeData(node)
             diagram.commitTransaction("remove node and link");
         }
 
