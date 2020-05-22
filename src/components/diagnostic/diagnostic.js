@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Sidemenu from '../sidemenu/sidemenu'
 import { useTheme } from '@material-ui/core/styles'
@@ -6,11 +6,24 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import View from './view'
 import Diagram from '../diagnostic/diagram'
 
+
 function Content(props) {
 
   const [diagramTracking, setDiagramTracking] = useState('KABF9VUMBKT')
+  const [inputs,setInputs] = useState([])
   const wrapperSetDiagramTraking = val => {
     setDiagramTracking(val)
+  }
+
+  useEffect(()=>{
+    console.log("inputs din diagnostic")
+    console.log(inputs)
+  },[inputs])
+
+  const wrapperSetInputs = (e) => {
+    let id = e.target.id
+    let value = e.target.value
+    setInputs({...inputs,[id]:value})
   }
 
   const theme = useTheme();
@@ -25,8 +38,8 @@ function Content(props) {
           <div>
             {/* pe ce diagrama sunt */}
             {diagramTracking}
-            <View diagramId = {diagramTracking}/>
-              <Diagram idgen={diagramTracking}/>
+            <View diagramId = {diagramTracking} inputsTrackingSetter={wrapperSetInputs}/>
+              <Diagram idgen={diagramTracking} inputs ={inputs}/>
           </div>
         </Grid>
       </Grid>

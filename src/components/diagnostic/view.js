@@ -23,7 +23,6 @@ const useStyles = makeStyles(theme => ({
       width: 300,
     }
   },
-
 }));
 
 // function TabPanel(props) {
@@ -56,11 +55,10 @@ const useStyles = makeStyles(theme => ({
 //   };
 // }
 
-function AdminPanel(props) {
+function View(props) {
   const classes = useStyles();
   //const [value, setValue] = React.useState('traseu');
   const [variableList, setVariableList] = React.useState([])
-  const [inputs, setInputs] = React.useState({})
   // const handleChange = (event, newValue) => {
   //   setValue(newValue);
   // };
@@ -75,13 +73,9 @@ function AdminPanel(props) {
       console.log(variableList)
     }
     fetchData();
+
     // eslint-disable-next-line
   }, [props.diagramId])
-
-  const handleChange = (e) => {
-    setInputs({ ...inputs, [e.target.id]: e.target.value });
-    console.log(inputs)
-  }
 
   return (
     <Grid container>
@@ -100,7 +94,8 @@ function AdminPanel(props) {
                   key={index}
                   name={obj.text}
                   type="number"
-                  onClick={(e) => {handleChange(e)}}
+                  onClick={(e) => {props.inputsTrackingSetter(e)}}
+                  onBlur={(e) => {props.inputsTrackingSetter(e)}}
                 />
               ))}
 
@@ -139,4 +134,4 @@ function AdminPanel(props) {
   );
 }
 
-export default AdminPanel
+export default View

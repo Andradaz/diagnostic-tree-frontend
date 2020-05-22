@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import getDiagramModel from '../../services/diagnostic/getDiagramModel'
+import Compute from '../../services/diagnostic/compute'
 
 class Diagram extends React.Component {
     constructor(props) {
@@ -15,7 +16,8 @@ class Diagram extends React.Component {
             linkDataArray: []
         }
         this.initDiagram = this.initDiagram.bind(this)
-        this.fetchData = this.fetchData.bind(this);
+        this.fetchData = this.fetchData.bind(this)
+        this.compute = this.compute.bind(this)
     }
 
     fetchData = async () => {
@@ -31,17 +33,47 @@ class Diagram extends React.Component {
         })
     }
 
+
+
     componentDidMount() {
         this.fetchData();
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.idgen!== prevProps.idgen)
-        {
+        if (this.props.idgen !== prevProps.idgen) {
             this.fetchData();
         }
     }
 
+    resolveAfter2Seconds() {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve('resolved');
+            }, 2000);
+        });
+    }
+
+
+    
+    compute = async () => {
+        let data = {
+            "idgen": this.props.idgen,
+            "inputs": Object.values(this.props.inputs)
+        }
+        console.log("DATAAAAAAAA")
+        console.log(data)
+        let result = await Compute(data)
+        
+
+        let animationMatrix = result.data
+        console.log(animationMatrix)
+        for(let i=0;i<animationMatrix.length; i++){
+            let line = animationMatrix[i]
+            this.setState({...this.state,nodeDataArray: line})
+            let time = await this.resolveAfter2Seconds();
+
+        }
+    }
 
     initDiagram() {
         const $ = go.GraphObject.make
@@ -53,14 +85,14 @@ class Diagram extends React.Component {
                     'undoManager.isEnabled': true,
                     'undoManager.maxHistoryLength': 0
                 },
-                );
+            );
 
         diagram.nodeTemplate =
             $(go.Node, "Auto",
                 $(go.Shape, { figure: "RoundedRectangle", stroke: null },
                     new go.Binding("fill", "color")),
                 $(go.TextBlock,
-                    { margin: 12, stroke: "#66696b", font: "12px sans-serif"},
+                    { margin: 12, stroke: "#66696b", font: "12px sans-serif" },
                     new go.Binding("text", "name").makeTwoWay()),
             );
 
@@ -78,7 +110,7 @@ class Diagram extends React.Component {
 
         let model = $(go.GraphLinksModel, {
             linkKeyProperty: 'key'  // this should always be set when using a GraphLinksModel
-          })
+        })
         diagram.model = model
         return diagram
     }
@@ -94,7 +126,7 @@ class Diagram extends React.Component {
                 />
                 <Grid container justify='flex-end' spacing={1}>
                     <Grid item>
-                        <Button variant="contained" disapletypography='true'>
+                        <Button variant="contained" disapletypography='true' onClick={this.compute}>
                             <Typography>
                                 Calculeazá
                         </Typography>
