@@ -96,6 +96,7 @@ function View(props) {
                   type="number"
                   onClick={(e) => {props.inputsTrackingSetter(e)}}
                   onBlur={(e) => {props.inputsTrackingSetter(e)}}
+                  size="small"
                 />
               ))}
 
