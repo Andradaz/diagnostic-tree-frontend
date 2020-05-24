@@ -8,7 +8,7 @@ var instance = axios.create({
 function promiseGetDiagramModel(data){
     return new Promise((resolve, reject) => {
         try{
-            resolve(instance.post('/diagnostic/compute', data))
+            resolve(instance.post('/diagnostic/compute2', data))
         }
         catch(e){
             console.log(`Axios request failed: ${e}`)

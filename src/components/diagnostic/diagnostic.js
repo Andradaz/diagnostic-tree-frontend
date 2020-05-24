@@ -9,7 +9,7 @@ import Diagram from '../diagnostic/diagram'
 
 function Content(props) {
 
-  const [diagramTracking, setDiagramTracking] = useState('KAIEPPUTPL3')
+  const [diagramTracking, setDiagramTracking] = useState('KALHC0Z2YBB')
   const [inputs,setInputs] = useState([])
   const wrapperSetDiagramTraking = val => {
     setDiagramTracking(val)
