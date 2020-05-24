@@ -9,8 +9,9 @@ import setDiagram from '../../services/diagnostic/setDiagram'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
 import setStatus from '../../services/diagnostic/setStatus'
-import getRuleErrorForNode from '../../services/diagnostic/getRuleErrorForNode'
-import getRuleSolutionForNode from '../../services/diagnostic/getRuleSolutionForNode'
+import GetNodeType from '../../services/diagnostic/getNodeType'
+//import getRuleErrorForNode from '../../services/diagnostic/getRuleErrorForNode'
+//import getRuleSolutionForNode from '../../services/diagnostic/getRuleSolutionForNode'
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -89,11 +90,12 @@ class Diagram extends React.Component {
             "idnode": node.data.key
         }
 
-        let isErrorNode = await getRuleErrorForNode(data)
-        let isSolutionNode = await getRuleSolutionForNode(data)
+        let result = await GetNodeType(data)
+        console.log("type node din create diagram")
+        console.log(result.data.nodeType)
         //adding a new node conditionally
-        if (isErrorNode.data || isSolutionNode.data) {
-            alert("Nu poti adauga un copil unui nod setat ca fiind terminal!")
+        if (result.data.nodeType === "solution" || result.data.nodeType === "error") {
+             alert("Nu poti adauga un copil unui nod setat ca fiind terminal!")
         } else {
             if ((nr < 2 && nr2 === 2) || (!parent && nr < 2)) {
                 diagram.startTransaction("add node and link");

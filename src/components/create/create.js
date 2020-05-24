@@ -8,6 +8,7 @@ import VariableText from './variableText'
 import VariableChips from './variableChips'
 import Paper from '@material-ui/core/Paper'
 import Rules from './rules'
+import Rules2 from './rules2'
 import Diagram from '../diagram/createDiagram'
 import {useParams} from 'react-router-dom'
 import SetVariable from '../../services/diagnostic/setVariable'
@@ -90,7 +91,7 @@ function Create(props) {
                         <Divider />
                     </Grid>
                     <Grid item container xs={12}>
-                        <Rules val={val} delete={toDelete} currentNode={currentNode} diagramId={id}/>
+                        <Rules2 val={val} delete={toDelete} currentNode={currentNode} diagramId={id}/>
                     </Grid>
                 </Paper>
             </Grid>
