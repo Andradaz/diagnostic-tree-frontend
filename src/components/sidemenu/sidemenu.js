@@ -11,6 +11,7 @@ const useStyles = makeStyles(theme => ({
       width: '100%',
       maxWidth: 360,
       backgroundColor: theme.palette.background.paper,
+      position: 'relative',
     },
     buttonRipple: {
         color: '#ffffff'
@@ -38,7 +39,8 @@ function Sidemenu(props) {
                   selected = {selectedIndex === index} 
                   onClick={event => handleListItemClick(event, index, obj.idgen)}
                   component={Link1} to={'/diagnostic/'+ obj.idgen}
-                  TouchRippleProps={{classes: {root: classes.buttonRipple}}}>
+                  //TouchRippleProps={{classes: {root: classes.buttonRipple}}}
+                  >
                   <ListItemText primary={obj.name} />
                   </ListItem>
                 )

@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import getDiagramModel from '../../services/diagnostic/getDiagramModel'
 import Compute from '../../services/diagnostic/compute'
+import Box from '@material-ui/core/Box'
 
 class Diagram extends React.Component {
     constructor(props) {
@@ -54,22 +55,21 @@ class Diagram extends React.Component {
     }
 
 
-    
+
     compute = async () => {
         let data = {
             "idgen": this.props.idgen,
             "inputs": Object.values(this.props.inputs)
         }
-        console.log("DATAAAAAAAA")
-        console.log(data)
-        let result = await Compute(data)
         
+        let result = await Compute(data)
+
 
         let animationMatrix = result.data
         console.log(animationMatrix)
-        for(let i=0;i<animationMatrix.length; i++){
+        for (let i = 0; i < animationMatrix.length; i++) {
             let line = animationMatrix[i]
-            this.setState({...this.state,nodeDataArray: line})
+            this.setState({ ...this.state, nodeDataArray: line })
             let time = await this.resolveAfter2Seconds();
 
         }
@@ -117,21 +117,25 @@ class Diagram extends React.Component {
 
     render() {
         return (
-            <Grid>
-                <ReactDiagram
-                    initDiagram={this.initDiagram}
-                    divClassName='diagram-componentt'
-                    nodeDataArray={this.state.nodeDataArray}
-                    linkDataArray={this.state.linkDataArray}
-                />
-                <Grid container justify='flex-end' spacing={1}>
+            <Grid item container xs={12}>
+                <Grid item container justify='flex-end' spacing={1}>
                     <Grid item>
-                        <Button variant="contained" disapletypography='true' onClick={this.compute}>
-                            <Typography>
-                                Calculeazá
-                        </Typography>
-                        </Button>
+                        <Box p={1}>
+                            <Button size ="small" variant="contained" color="primary" disabletypography='true' onClick={this.compute}>
+                                <Typography>
+                                    Calculează
+                                </Typography>
+                            </Button>
+                        </Box>
                     </Grid>
+                </Grid>
+                <Grid item>
+                    <ReactDiagram
+                        initDiagram={this.initDiagram}
+                        divClassName='diagram-componentt'
+                        nodeDataArray={this.state.nodeDataArray}
+                        linkDataArray={this.state.linkDataArray}
+                    />
                 </Grid>
             </Grid>
         );

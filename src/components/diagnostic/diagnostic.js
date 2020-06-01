@@ -9,7 +9,7 @@ import Diagram from '../diagnostic/diagram'
 
 function Content(props) {
 
-  const [diagramTracking, setDiagramTracking] = useState('KALHC0Z2YBB')
+  const [diagramTracking, setDiagramTracking] = useState('KAV38WPSM8E')
   const [inputs,setInputs] = useState([])
   const wrapperSetDiagramTraking = val => {
     setDiagramTracking(val)
@@ -31,15 +31,13 @@ function Content(props) {
   if (useMediaQuery(theme.breakpoints.up('md'))) {
     return (
       <Grid container spacing={1}>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <Sidemenu list={props.list} diagramTrackingSetter={wrapperSetDiagramTraking} />
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={10}>
           <div>
-            {/* pe ce diagrama sunt */}
-            {diagramTracking}
             <View diagramId = {diagramTracking} inputsTrackingSetter={wrapperSetInputs}/>
-              <Diagram idgen={diagramTracking} inputs ={inputs}/>
+            <Diagram idgen={diagramTracking} inputs ={inputs}/>
           </div>
         </Grid>
       </Grid>

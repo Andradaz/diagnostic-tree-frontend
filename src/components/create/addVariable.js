@@ -94,15 +94,11 @@ function AddVariable(props) {
                     <DisplayAlert error={error}/>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="secondary" disabletypography='true'>
-                        <Typography>
-                            Renunță
-                        </Typography>
+                    <Button onClick={handleClose}>
+                            Cancel
                     </Button>
-                    <Button variant="contained" onClick={handleSave} color="primary" disabletypography='true'>
-                        <Typography>
-                            Adaugă
-                        </Typography>
+                    <Button onClick={handleSave} color="secondary">
+                            Add
                     </Button>
                 </DialogActions>
             </Dialog>

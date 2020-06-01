@@ -9,6 +9,11 @@ import Box from '@material-ui/core/Box'
 //import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import GetVariableList from '../../services/diagnostic/getVariableList'
+import Card from "@material-ui/core/Card"
+import CardContent from "@material-ui/core/CardContent"
+import Typography from "@material-ui/core/Typography"
+import GetName from '../../services/diagnostic/getName'
+import GetDescription from '../../services/diagnostic/getDescription'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,6 +27,12 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(1),
       width: 300,
     }
+  },
+  Card: {
+    minWidth: 275,
+  },
+  title: {
+    fontSize: 14
   },
 }));
 
@@ -57,20 +68,32 @@ const useStyles = makeStyles(theme => ({
 
 function View(props) {
   const classes = useStyles();
-  //const [value, setValue] = React.useState('traseu');
+
   const [variableList, setVariableList] = React.useState([])
-  // const handleChange = (event, newValue) => {
-  //   setValue(newValue);
-  // };
+  const [description, setDescription] = React.useState("")
+  const [name, setName] = React.useState("")
 
   useEffect(() => {
     async function fetchData() {
       let data = {
         "idgen": props.diagramId
       }
+
+      setVariableList([])
       let list = await GetVariableList(data)
       setVariableList(list.data)
-      console.log(variableList)
+      
+      setName("")
+      let currentName = await GetName(data)
+      console.log("currentName")
+      console.log(currentName)
+      setName(currentName.data.name)
+      
+      setDescription("")
+      let currentDescription = await GetDescription(data)
+      console.log("avem multilines?")
+      console.log(currentDescription.data.description)
+      setDescription(currentDescription.data.description)
     }
     fetchData();
 
@@ -79,9 +102,30 @@ function View(props) {
 
   return (
     <Grid container>
+      <Grid item xs={12}>
+      <Box p={1}>
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography
+              className={classes.title}
+              color="textSecondary"
+              gutterBottom
+            >
+              Diagrama de diagnostic
+        </Typography>
+            <Typography variant="h5" component="h2">
+              {name}
+        </Typography>
+            <Typography variant="body2" component="p" style={{whiteSpace: 'pre-line'}}>
+              {description}
+            </Typography>
+          </CardContent>
+        </Card>
+        </Box>
+      </Grid>
       <Grid item container xs={12}>
         <Grid item xs={12}>
-          <Box pt={1}>
+          <Box p={1}>
             <form className={classes.form} noValidate autoComplete="off">
               {variableList.map((obj, index) => (
                 <TextField
@@ -94,8 +138,8 @@ function View(props) {
                   key={index}
                   name={obj.text}
                   type="number"
-                  onClick={(e) => {props.inputsTrackingSetter(e)}}
-                  onBlur={(e) => {props.inputsTrackingSetter(e)}}
+                  onClick={(e) => { props.inputsTrackingSetter(e) }}
+                  onBlur={(e) => { props.inputsTrackingSetter(e) }}
                   size="small"
                 />
               ))}
@@ -103,33 +147,8 @@ function View(props) {
             </form>
           </Box>
         </Grid>
-        {/* <Grid item xs={6}>
-          <Paper square>
-            <Tabs
-              value={value}
-              indicatorColor="secondary"
-              textColor="secondary"
-              onChange={handleChange}
-              aria-label="disabled tabs example"
-              centered
-            >
-              <Tab value='traseu' label="Traseu principal" {...a11yProps('vizualizeaza')} />
-              <Tab value='complet' label="Diagrama" {...a11yProps('editeaza')} />
-            </Tabs>
-          </Paper>
-        </Grid> */}
       </Grid>
-      {/* <Grid item xs={12}>
-        <TabPanel value={value} index='traseu'>
-          Diagrama sub forma de traseu
-        </TabPanel>
-        <TabPanel value={value} index='complet'>
-          Diagrama completa
-        </TabPanel>
-      </Grid> */}
-      <Grid item xs={12}>
-        Diagrama
-      </Grid>
+
 
     </Grid>
   );

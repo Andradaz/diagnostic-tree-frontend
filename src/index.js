@@ -8,10 +8,8 @@ import 'typeface-roboto'
 
 const theme = createMuiTheme({
     palette: {
-        //#41d0b3 green
-        //#dcf2ee
         primary: { main: '#78e1ff' },
-        secondary: { main: '#78e1ff' },
+        secondary: { main: '#24ceff' },
         action: { selected: '#78e1ff',
                    hover: '#c9f3ff'},
       },

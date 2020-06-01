@@ -269,9 +269,9 @@ function Rules(props) {
                 </Grid>
                 <Grid item container xs={4} justify="center">
                     <Grid item>
-                        <Button variant="outlined" color="primary" onClick={handleClickOpen} disabled={disable}>
-                            Adaugă
-                            </Button>
+                        <Button variant="outlined" size="small" color="secondary" onClick={handleClickOpen} disabled={disable}>
+                            +
+                        </Button>
                     </Grid>
                 </Grid>
                 <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -339,18 +339,19 @@ function Rules(props) {
                                             label="Parametru"
                                             color='secondary'
                                             onChange={handleChangeParam}
-                                            onBlur={paramOnBlur} />
+                                            onBlur={paramOnBlur}
+                                            type="number"/>
                                     </form>
                                 </Box>
                             </Grid>
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} color="primary">
+                        <Button onClick={handleClose}>
                             Cancel
                         </Button>
-                        <Button onClick={handleCloseAndSave} color="primary">
-                            Adaugă
+                        <Button onClick={handleCloseAndSave} color="secondary">
+                            Add
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -375,14 +376,14 @@ function Rules(props) {
                         </div>
                     </Box>
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                     <Box pl={3} pt={3}>
                         <Typography variant='body2'>
                             Dacă nodul este unul terminal, selectează tipul său <br></br>(Eroare sau Soluție)
                         </Typography>
                     </Box>
-                </Grid>
-                <Grid item xs={12}>
+                </Grid> */}
+                {/* <Grid item xs={12}>
                     <Box pl={3} pt={3}>
                         <FormControl component="fieldset">
                             <FormLabel component="legend">Tipul nodului</FormLabel>
@@ -393,7 +394,7 @@ function Rules(props) {
                             </RadioGroup>
                         </FormControl>
                     </Box>
-                </Grid>
+                </Grid> */}
             </Grid>
         );
     } else {

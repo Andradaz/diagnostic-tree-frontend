@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
     },
     resize: {
         fontSize: 20,
-        color: '#78e1ff'
+        // color: '#78e1ff'
     },
     labelRoot: {
         fontSize: 17,
@@ -20,18 +20,18 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const saveName = async (name,idgen) => {
-        let data = {
-            "name": name,
-            "idgen": idgen
-        }
-        await SetName(data)
+const saveName = async (name, idgen) => {
+    let data = {
+        "name": name,
+        "idgen": idgen
     }
+    await SetName(data)
+}
 
 function DiagramName(props) {
     const classes = useStyles()
     const [name, setName] = useState()
-    
+
     const handleChange = (event) => {
         setName(event.target.value)
     }
@@ -55,7 +55,7 @@ function DiagramName(props) {
                 label='Denumire'
                 color='secondary'
                 onChange={handleChange}
-                onBlur={function(){ return saveName(name,props.diagramId)}} />
+                onBlur={function () { return saveName(name, props.diagramId) }} />
         </form>
     )
 }

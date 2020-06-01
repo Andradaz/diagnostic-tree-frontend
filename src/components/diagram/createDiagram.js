@@ -59,8 +59,8 @@ class Diagram extends React.Component {
         let nr = 0;
 
 
-        let BrotherDecision = true
-        let myDecision = true
+        let BrotherDecision = false
+        let myDecision = false
         while (linkIt.next()) {
             nr++
             BrotherDecision = linkIt.value.data.text
@@ -90,13 +90,13 @@ class Diagram extends React.Component {
             "idnode": node.data.key
         }
 
-        let result = await GetNodeType(data)
-        console.log("type node din create diagram")
-        console.log(result.data.nodeType)
-        //adding a new node conditionally
-        if (result.data.nodeType === "solution" || result.data.nodeType === "error") {
-             alert("Nu poti adauga un copil unui nod setat ca fiind terminal!")
-        } else {
+        // let result = await GetNodeType(data)
+        // console.log("type node din create diagram")
+        // console.log(result.data.nodeType)
+        // //adding a new node conditionally
+        // if (result.data.nodeType === "solution" || result.data.nodeType === "error") {
+        //     alert("Nu poti adauga un copil unui nod setat ca fiind terminal!")
+        // } else {
             if ((nr < 2 && nr2 === 2) || (!parent && nr < 2)) {
                 diagram.startTransaction("add node and link");
                 // have the Model add the node data
@@ -119,7 +119,6 @@ class Diagram extends React.Component {
             } else {
                 alert("Arborele trebuie să fie binar!")
             }
-        }
 
         this.setState({ save: diagram.model.toJson() })
     }
@@ -259,10 +258,8 @@ class Diagram extends React.Component {
                     <Grid item>
                         <Button variant="contained" color='primary' disapletypography='true' onClick={() => this.onClickSetStatus(this.props.id, 'true')}>
                             <Typography>
-                                {/* pun intr-un json in backend numele diagramei si id-ul, apoi cand randez
-                        meniul il randez folosesc jsonul respectiv  */}
-                        Publică
-                        </Typography>
+                                Publică
+                            </Typography>
                         </Button>
                     </Grid>
                 </Grid>
