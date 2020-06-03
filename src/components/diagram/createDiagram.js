@@ -9,9 +9,6 @@ import setDiagram from '../../services/diagnostic/setDiagram'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
 import setStatus from '../../services/diagnostic/setStatus'
-import GetNodeType from '../../services/diagnostic/getNodeType'
-//import getRuleErrorForNode from '../../services/diagnostic/getRuleErrorForNode'
-//import getRuleSolutionForNode from '../../services/diagnostic/getRuleSolutionForNode'
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -85,40 +82,28 @@ class Diagram extends React.Component {
 
         }
 
-        let data = {
-            "idgen": this.props.id,
-            "idnode": node.data.key
+        if ((nr < 2 && nr2 === 2) || (!parent && nr < 2)) {
+            diagram.startTransaction("add node and link");
+            // have the Model add the node data
+            let newnode = { key: "N", color: '#c0cacf' };
+            diagram.model.addNodeData(newnode);
+            // locate the node initially where the parent node is
+            diagram.findNodeForData(newnode).location = node.location;
+            // and then add a link data connecting the original node with the new one
+            let newlink = { from: node.data.key, to: newnode.key };
+            diagram.model.addLinkData(newlink);
+            let newlinkObject = diagram.findLinkForData(newlink)
+
+            diagram.model.setDataProperty(newlinkObject.data, "text", myDecision)
+            // finish the transaction -- will automatically perform a layout
+            diagram.commitTransaction("add node and link");
+            let model = JSON.parse(diagram.model.toJson())
+            this.setState({
+                nodeDataArray: model.nodeDataArray,
+            })
+        } else {
+            alert("Arborele trebuie să fie binar!")
         }
-
-        // let result = await GetNodeType(data)
-        // console.log("type node din create diagram")
-        // console.log(result.data.nodeType)
-        // //adding a new node conditionally
-        // if (result.data.nodeType === "solution" || result.data.nodeType === "error") {
-        //     alert("Nu poti adauga un copil unui nod setat ca fiind terminal!")
-        // } else {
-            if ((nr < 2 && nr2 === 2) || (!parent && nr < 2)) {
-                diagram.startTransaction("add node and link");
-                // have the Model add the node data
-                let newnode = { key: "N", color: '#c0cacf' };
-                diagram.model.addNodeData(newnode);
-                // locate the node initially where the parent node is
-                diagram.findNodeForData(newnode).location = node.location;
-                // and then add a link data connecting the original node with the new one
-                let newlink = { from: node.data.key, to: newnode.key };
-                diagram.model.addLinkData(newlink);
-                let newlinkObject = diagram.findLinkForData(newlink)
-
-                diagram.model.setDataProperty(newlinkObject.data, "text", myDecision)
-                // finish the transaction -- will automatically perform a layout
-                diagram.commitTransaction("add node and link");
-                let model = JSON.parse(diagram.model.toJson())
-                this.setState({
-                    nodeDataArray: model.nodeDataArray,
-                })
-            } else {
-                alert("Arborele trebuie să fie binar!")
-            }
 
         this.setState({ save: diagram.model.toJson() })
     }
@@ -233,6 +218,7 @@ class Diagram extends React.Component {
             id: idgen,
             status: booleanStatus
         }
+        await this.save()
         await setStatus(data)
         this.setState({ open1: true })
         setTimeout(this.redirect, 3000)

@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 import SetDescription from '../../services/diagnostic/setDescription'
-import Box from '@material-ui/core/Box'
-import Typography from '@material-ui/core/Typography'
 import Tooltip from '@material-ui/core/Tooltip'
 
 const useStyles = makeStyles(theme => ({

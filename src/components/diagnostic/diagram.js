@@ -25,8 +25,12 @@ class Diagram extends React.Component {
         let data = {
             "idgen": this.props.idgen
         }
+        this.setState({
+            nodeDataArray: [],
+            linkDataArray: []
+        })
+
         let diagramModel = await getDiagramModel(data)
-        console.log(diagramModel.data[0])
 
         this.setState({
             nodeDataArray: diagramModel.data[0].nodeDataArray,
@@ -59,18 +63,17 @@ class Diagram extends React.Component {
     compute = async () => {
         let data = {
             "idgen": this.props.idgen,
-            "inputs": Object.values(this.props.inputs)
+            "inputs": this.props.inputs
         }
         
         let result = await Compute(data)
 
 
         let animationMatrix = result.data
-        console.log(animationMatrix)
         for (let i = 0; i < animationMatrix.length; i++) {
             let line = animationMatrix[i]
             this.setState({ ...this.state, nodeDataArray: line })
-            let time = await this.resolveAfter2Seconds();
+            await this.resolveAfter2Seconds();
 
         }
     }

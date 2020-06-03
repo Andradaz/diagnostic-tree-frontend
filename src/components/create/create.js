@@ -7,15 +7,12 @@ import DiagramName from './diagramName'
 import VariableText from './variableText'
 import VariableChips from './variableChips'
 import Paper from '@material-ui/core/Paper'
-import Rules from './rules'
 import Rules2 from './rules2'
 import Diagram from '../diagram/createDiagram'
 import { useParams } from 'react-router-dom'
 import SetVariable from '../../services/diagnostic/setVariable'
 import DeleteVariable from '../../services/diagnostic/deleteVariable'
 import DiagramDescription from './diagramDescription'
-import Typography from '@material-ui/core/Typography'
-import Box from '@material-ui/core/Box'
 
 
 function Create(props) {
@@ -24,22 +21,17 @@ function Create(props) {
     const [val, setVal] = useState()
     const [toDelete, setToDelete] = useState(-1)
     const [currentNode, setCurrentNode] = useState(0)
-    const [ok, setOk] = useState(0)
-
-    // useEffect(() => {
-    //     loadDataOnlyOnce();
-    //   }, []);
 
     const wrapperAddVariable = async (val) => {
         var list = variables
-        list.push(val)
+        list.push(val.name)
         let data = {
             "variable": val,
             "idgen": id
         }
         await SetVariable(data)
         setVariables(list)
-        setVal(val)
+        setVal(val.name)
     }
 
     const wrapperDeleteVariable = async (index) => {

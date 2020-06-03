@@ -16,8 +16,7 @@ function Content(props) {
   }
 
   useEffect(()=>{
-    console.log("inputs din diagnostic")
-    console.log(inputs)
+
   },[inputs])
 
   const wrapperSetInputs = (e) => {

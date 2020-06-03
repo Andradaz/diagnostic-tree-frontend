@@ -85,14 +85,10 @@ function View(props) {
       
       setName("")
       let currentName = await GetName(data)
-      console.log("currentName")
-      console.log(currentName)
       setName(currentName.data.name)
       
       setDescription("")
       let currentDescription = await GetDescription(data)
-      console.log("avem multilines?")
-      console.log(currentDescription.data.description)
       setDescription(currentDescription.data.description)
     }
     fetchData();
@@ -129,7 +125,8 @@ function View(props) {
             <form className={classes.form} noValidate autoComplete="off">
               {variableList.map((obj, index) => (
                 <TextField
-                  label={obj}
+                  required={obj.req}
+                  label={obj.name}
                   id={index.toString()}
                   defaultValue={obj.text}
                   variant="outlined"
