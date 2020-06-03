@@ -16,6 +16,8 @@ import Diagnostic from './components/diagnostic/diagnostic'
 import GetList from './services/diagnostic/getList'
 import Create from '../src/components/create/create'
 import EditPanel from '../src/components/admin/editpanel'
+import SignIn from './components/login/signin'
+import SignUp from './components/login/signup'
 
 function NavBar(props) {
   const theme = useTheme();
@@ -53,9 +55,15 @@ class App extends React.Component {
           </Grid>
           <Grid item xs={12}>
             <Switch>
-              <Route path="/admin/create/:id" children={<Create/>}/>
+              <Route path="/signin">
+                <SignIn />
+              </Route>
+              <Route path="/signup">
+                <SignUp/>
+              </Route>
+              <Route path="/admin/create/:id" children={<Create />} />
               <Route path="/admin/edit">
-                <EditPanel/>
+                <EditPanel />
               </Route>
               <Route path="/admin">
                 <Admin />
