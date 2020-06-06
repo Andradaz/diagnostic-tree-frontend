@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import React, { useState } from 'react'
+//import {useContext} from 'react'
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import TextField from '@material-ui/core/TextField'
+import Link from '@material-ui/core/Link'
+import Grid from '@material-ui/core/Grid'
+import Box from '@material-ui/core/Box'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
+import Container from '@material-ui/core/Container'
+import signInData from '../../services/users/signIn'
+import Snackbar from '@material-ui/core/Snackbar'
+import MuiAlert from '@material-ui/lab/Alert'
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 function Copyright() {
     return (
@@ -47,15 +55,58 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
     const classes = useStyles()
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [openSuccess, setOpenSucces] = useState(false)
+    const [openFail, setOpenFail] = useState(false)
+    const [error, setError] = useState(" ")
 
     const handleChangeEmail = (event) => {
-        setEmail(event.target.value);
+        let value = event.target.value
+        setEmail(value);
     };
 
     const handleChangePassword = (event) => {
         setPassword(event.target.value);
+    };
+
+    const redirect = () => {
+        window.location.href = 'http://localhost:3001/admin'
+    }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        let data = {
+            "logemail": email,
+            "logpassword": password
+        }
+        let result = await signInData(data)
+        if (result.data.error) {
+            setError(result.data.error)
+            setOpenFail(true)
+        } else {
+            sessionStorage.setItem('currentUser', result.data.userid)
+            sessionStorage.setItem('username', result.data.username)
+            sessionStorage.setItem('admin', result.data.admin)
+            setOpenSucces(true)
+            setTimeout(redirect, 3000)
+
+        }
+
+    }
+
+    const handleCloseSuccess = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenSucces(false)
+    };
+
+    const handleCloseFail = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenFail(false)
     };
 
     return (
@@ -67,9 +118,11 @@ export default function SignIn() {
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign in
-          </Typography>
-                <form className={classes.form} noValidate>
+                </Typography>
+                <form className={classes.form}>
                     <TextField
+                        color="secondary"
+                        type="email"
                         variant="outlined"
                         margin="normal"
                         required
@@ -77,10 +130,9 @@ export default function SignIn() {
                         id="email"
                         label="Email Address"
                         name="email"
-                        autoComplete="email"
-                        color="secondary"
+                        autoComplete="off"
                         value={email}
-                        handleChangeEmail={handleChangeEmail}
+                        onChange={handleChangeEmail}
                         autoFocus
                     />
                     <TextField
@@ -95,7 +147,7 @@ export default function SignIn() {
                         autoComplete="current-password"
                         color="secondary"
                         value={password}
-                        handleChangePassword={handleChangePassword}
+                        onChange={handleChangePassword}
                     />
                     <Button
                         type="submit"
@@ -103,6 +155,7 @@ export default function SignIn() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        onClick={handleSubmit}
                     >
                         Sign In
                     </Button>
@@ -113,7 +166,7 @@ export default function SignIn() {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2" color="secondary">
+                            <Link href="/signup" variant="body2" color="secondary">
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>
@@ -123,6 +176,16 @@ export default function SignIn() {
             <Box mt={8}>
                 <Copyright />
             </Box>
+            <Snackbar open={openSuccess} autoHideDuration={3000} onClose={handleCloseSuccess}>
+                <Alert onClose={handleCloseSuccess} severity="success">
+                    Autentificare realizată cu succes!
+                    </Alert>
+            </Snackbar>
+            <Snackbar open={openFail} autoHideDuration={3000} onClose={handleCloseFail}>
+                <Alert onClose={handleCloseFail} severity="error">
+                    {error}
+                </Alert>
+            </Snackbar>
         </Container>
     );
 }

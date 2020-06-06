@@ -18,6 +18,8 @@ import Create from '../src/components/create/create'
 import EditPanel from '../src/components/admin/editpanel'
 import SignIn from './components/login/signin'
 import SignUp from './components/login/signup'
+import { AuthProvider } from './Auth'
+import PrivateRoute from './privateRoute'
 
 function NavBar(props) {
   const theme = useTheme();
@@ -48,39 +50,39 @@ class App extends React.Component {
   }
   render() {
     return (
-      <Router>
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
-            <NavBar list={this.state.list} />
+      <AuthProvider>
+        <Router>
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <NavBar list={this.state.list} />
+            </Grid>
+            <Grid item xs={12}>
+              <Switch>
+                <Route path="/signin">
+                  <SignIn />
+                </Route>
+                <Route path="/signup">
+                  <SignUp />
+                </Route>
+                <Route path="/admin/create/:id" children={<Create />} />
+                <Route path="/admin/edit">
+                  <EditPanel />
+                </Route>
+                <PrivateRoute path="/admin" component={Admin}/>
+                <Route path="/diagnostic">
+                  <Diagnostic list={this.state.list} />
+                </Route>
+                <Route path="/about">
+                  <About />
+                </Route>
+                <Route path="/">
+                  <About />
+                </Route>
+              </Switch>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Switch>
-              <Route path="/signin">
-                <SignIn />
-              </Route>
-              <Route path="/signup">
-                <SignUp/>
-              </Route>
-              <Route path="/admin/create/:id" children={<Create />} />
-              <Route path="/admin/edit">
-                <EditPanel />
-              </Route>
-              <Route path="/admin">
-                <Admin />
-              </Route>
-              <Route path="/diagnostic">
-                <Diagnostic list={this.state.list} />
-              </Route>
-              <Route path="/about">
-                <About />
-              </Route>
-              <Route path="/">
-                <About />
-              </Route>
-            </Switch>
-          </Grid>
-        </Grid>
-      </Router>
+        </Router>
+      </AuthProvider>
     );
   }
 }
