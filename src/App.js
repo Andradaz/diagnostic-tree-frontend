@@ -20,6 +20,7 @@ import SignIn from './components/login/signin'
 import SignUp from './components/login/signup'
 import { AuthProvider } from './Auth'
 import PrivateRoute from './privateRoute'
+import Import from './components/import/import'
 
 function NavBar(props) {
   const theme = useTheme();
@@ -64,10 +65,11 @@ class App extends React.Component {
                 <Route path="/signup">
                   <SignUp />
                 </Route>
-                <Route path="/admin/create/:id" children={<Create />} />
+                <Route path="/admin/create/:id" children={<Create import="no"/>} />
                 <Route path="/admin/edit">
                   <EditPanel />
                 </Route>
+                  <Route path="/admin/import/:id" children={<Import />} />
                 <PrivateRoute path="/admin" component={Admin}/>
                 <Route path="/diagnostic">
                   <Diagnostic list={this.state.list} />

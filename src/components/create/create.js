@@ -13,7 +13,49 @@ import { useParams } from 'react-router-dom'
 import SetVariable from '../../services/diagnostic/setVariable'
 import DeleteVariable from '../../services/diagnostic/deleteVariable'
 import DiagramDescription from './diagramDescription'
+import { DropzoneDialog } from 'material-ui-dropzone'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
+import Box from '@material-ui/core/Box'
 
+
+function ImportButton(props) {
+    const [open, setOpen] = React.useState(false);
+
+    if (props.import === "no") {
+        return (
+            <div></div>
+        )
+    } else {
+        return (
+            <div>
+                <Box pl={3}>
+                    <Button disapletypography='true' variant="outlined" color="secondary" onClick={() => setOpen(true)}>
+                        <Typography>
+                            Importă diagrama
+                    </Typography>
+                    </Button>
+                </Box>
+                <DropzoneDialog
+                    acceptedFiles={['application/json']}
+                    cancelButtonText={"cancel"}
+                    submitButtonText={"submit"}
+                    maxFileSize={5000000}
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    onSave={(files) => {
+                        console.log('Files:', files);
+                        setOpen(false);
+                    }}
+                    showPreviews={false}
+                    showPreviewsInDropzone={true}
+                    showFileNames={true}
+                    filesLimit={1}
+                />
+            </div>
+        )
+    }
+}
 
 function Create(props) {
     var { id } = useParams();
@@ -21,6 +63,7 @@ function Create(props) {
     const [val, setVal] = useState()
     const [toDelete, setToDelete] = useState(-1)
     const [currentNode, setCurrentNode] = useState(0)
+
 
     const wrapperAddVariable = async (val) => {
         var list = variables
@@ -58,7 +101,7 @@ function Create(props) {
 
         <Grid container>
             <Grid item xs={4}>
-                <DiagramText />
+                <DiagramText import={props.import} />
             </Grid>
             <Grid item container justify='center' xs={8}>
                 <DiagramName diagramId={id} />
@@ -74,6 +117,7 @@ function Create(props) {
                             <DiagramDescription diagramId={id} />
                         </Grid>
                     </Grid>
+                    <ImportButton import={props.import} />
                     <Grid item container xs={12} alignItems='flex-start'>
                         <Grid item xs={5}>
                             <VariableText />

@@ -38,6 +38,7 @@ function DiagramDescription(props) {
                 id="outlined-textarea"
                 label="Descriere"
                 multiline
+                rowsMax={4}
                 size="small"
                 variant="outlined"
                 color="secondary"

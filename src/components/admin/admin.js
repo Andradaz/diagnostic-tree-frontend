@@ -13,6 +13,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import Link from '@material-ui/core/Link'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Background from '../../images/blue.jpg'
+import publish from './publish.svg'
 
 const useStyles = makeStyles(theme => ({
   mainFeaturedPost: {
@@ -47,7 +48,8 @@ const useStyles = makeStyles(theme => ({
     flex: 1,
   },
   cardMedia: {
-    width: 160,
+    width: 100,
+    height: 100
   },
   cardAction: {
       textAlign: 'initial',
@@ -80,7 +82,7 @@ function Admin() {
         </Grid>
       </Paper>
       <Grid container spacing={4}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
         <Link
             to='/admin/edit' underline='none'
             component={RouterLink}
@@ -95,19 +97,19 @@ function Admin() {
                     Editează
               </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Editează una dintre diagramele deja existente.
+                    Editează o diagramă.
               </Typography>
                   <Typography variant="subtitle1" paragraph>
-                    Modifică nodurile, parametrii, variabilele definite sau șterge o diagramă.
+                    Modifică proprietățile definite sau șterge o diagramă.
               </Typography>
                 </CardContent>
               </div>
-              <CardMedia className={classes.cardMedia} image={edit} title='titlu' />
+              <CardMedia className={classes.cardMedia} image={edit} title='titlu'/>
             </Card>
           </ButtonBase>
           </Link>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <Link
             to={'/admin/create/' + generateId()} underline='none'
             component={RouterLink}
@@ -130,6 +132,33 @@ function Admin() {
                   </CardContent>
                 </div>
                 <CardMedia className={classes.cardMedia} image={add} title='titlu' />
+              </Card>
+            </ButtonBase>
+          </Link>   
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Link
+            to={'/admin/import/' + generateId()} underline='none'
+            component={RouterLink}
+          >
+            <ButtonBase
+            className={classes.cardAction}
+            focusRipple={true}>
+              <Card className={classes.card}>
+                <div className={classes.cardDetails}>
+                  <CardContent>
+                    <Typography component="h2" variant="h5">
+                      Importă
+              </Typography>
+                    <Typography variant="subtitle1" color="textSecondary">
+                      Weka output, J48
+              </Typography>
+                    <Typography variant="subtitle1" paragraph>
+                      Încarcă un arbore de decizie creat cu ajutorul algoritmului J48, Weka.
+              </Typography>
+                  </CardContent>
+                </div>
+                <CardMedia className={classes.cardMedia} image={publish} title='titlu' />
               </Card>
             </ButtonBase>
           </Link>   
