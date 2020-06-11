@@ -17,6 +17,7 @@ import { DropzoneDialog } from 'material-ui-dropzone'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
+import computeWekaOutput from '../../services/diagnostic/computeWekaOutput'
 
 
 function ImportButton(props) {
@@ -37,14 +38,24 @@ function ImportButton(props) {
                     </Button>
                 </Box>
                 <DropzoneDialog
-                    acceptedFiles={['application/json']}
+                    acceptedFiles={['text/plain']}
                     cancelButtonText={"cancel"}
                     submitButtonText={"submit"}
                     maxFileSize={5000000}
                     open={open}
                     onClose={() => setOpen(false)}
                     onSave={(files) => {
-                        console.log('Files:', files);
+                        const reader = new FileReader()
+                        reader.readAsText(files[0])
+                        reader.onload = async () => {
+                        const str = reader.result
+                        console.log(str)
+                        let data = {
+                            wekaOutput: str
+                        }
+                        let result = await computeWekaOutput(data)
+                        console.log(result)
+                        }
                         setOpen(false);
                     }}
                     showPreviews={false}
