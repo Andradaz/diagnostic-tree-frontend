@@ -51,10 +51,14 @@ function ImportButton(props) {
                         const str = reader.result
                         console.log(str)
                         let data = {
-                            wekaOutput: str
+                            wekaOutput: str,
+                            idgen: props.idgen
                         }
                         let result = await computeWekaOutput(data)
-                        console.log(result)
+                        console.log(result.data)
+                        if(result.data.response==="Succesfully imported diagram in diagnostic."){
+                            props.setImported("true")
+                        }
                         }
                         setOpen(false);
                     }}
@@ -74,6 +78,7 @@ function Create(props) {
     const [val, setVal] = useState()
     const [toDelete, setToDelete] = useState(-1)
     const [currentNode, setCurrentNode] = useState(0)
+    const [imported, setImported] = useState(0)
 
 
     const wrapperAddVariable = async (val) => {
@@ -104,6 +109,15 @@ function Create(props) {
         }
     }
 
+    const wrapperSetImported = val => {
+        console.log("val")
+        console.log(val)
+        if(val === "true"){
+            console.log("am setat imported")
+            setImported(imported + 1)
+        }
+    }
+
     const wrapperSetCurrentNode = val => {
         setCurrentNode(val)
     }
@@ -125,10 +139,10 @@ function Create(props) {
                 <Paper elevation={3}>
                     <Grid item container xs={12} alignItems='flex-start'>
                         <Grid item xs={12}>
-                            <DiagramDescription diagramId={id} />
+                            <DiagramDescription diagramId={id}/>
                         </Grid>
                     </Grid>
-                    <ImportButton import={props.import} />
+                    <ImportButton import={props.import} idgen = {id} setImported={wrapperSetImported}/>
                     <Grid item container xs={12} alignItems='flex-start'>
                         <Grid item xs={5}>
                             <VariableText />
@@ -152,7 +166,7 @@ function Create(props) {
                 </Paper>
             </Grid>
             <Grid item>
-                <Diagram setCurrentNode={wrapperSetCurrentNode} id={id} />
+                <Diagram setCurrentNode={wrapperSetCurrentNode} id={id} imported={imported} import={props.import}/>
             </Grid>
         </Grid>
     );

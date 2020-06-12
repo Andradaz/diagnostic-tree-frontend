@@ -9,6 +9,7 @@ import setDiagram from '../../services/diagnostic/setDiagram'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
 import setStatus from '../../services/diagnostic/setStatus'
+import getDiagramModel from '../../services/diagnostic/getDiagramModel'
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -32,6 +33,42 @@ class Diagram extends React.Component {
         this.handleClose = this.handleClose.bind(this)
         this.textEdited = this.textEdited.bind(this)
         this.backgroundSingleClicked = this.backgroundSingleClicked.bind(this)
+        this.fetchData = this.fetchData.bind(this)
+    }
+
+    fetchData = async () => {
+        let data = {
+            "idgen": this.props.id
+        }
+        console.log(this.props.id)
+        this.setState({
+            nodeDataArray: [],
+            linkDataArray: []
+        })
+
+        let diagramModel = await getDiagramModel(data)
+        console.log(diagramModel)
+
+        this.setState({
+            nodeDataArray: diagramModel.data[0].nodeDataArray,
+            linkDataArray: diagramModel.data[0].linkDataArray
+        })
+    }
+
+    componentDidMount() {
+        if(this.props.import === "yes" && this.props.imported > 0){
+            this.fetchData();
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.imported !== prevProps.imported) {
+            console.log("imported")
+            console.log(this.props.imported)
+            if(this.props.imported > 0){
+                this.fetchData();
+            }
+        }
     }
 
     onNodeClick(e) {
