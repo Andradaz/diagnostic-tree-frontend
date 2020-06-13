@@ -23,6 +23,7 @@ import IconButton from '@material-ui/core/IconButton'
 import SetRule from '../../services/diagnostic/setRule'
 import GetRulesForNode from '../../services/diagnostic/getStringNodeRules'
 import DeleteRule from '../../services/diagnostic/deleteRule'
+import getVariableList from '../../services/diagnostic/getVariableList'
 
 
 
@@ -66,6 +67,20 @@ function Rules(props) {
 
                 let rulesList = await GetRulesForNode(data)
                 setRulesList(rulesList.data)
+            }
+            if(props.imported > 0 && props.import === "yes"){
+                let data = {
+                    "idgen": props.diagramId
+                }
+
+                let result = await getVariableList(data)
+                console.log("Result din rules")
+                console.log(result)
+                let  variables = []
+                result.data.forEach((obj)=>{
+                    variables.push(obj.name)
+                })
+                setSelectItems(variables)
             }
         }
         fetchData();

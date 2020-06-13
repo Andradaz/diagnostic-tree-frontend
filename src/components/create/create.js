@@ -81,6 +81,11 @@ function Create(props) {
     const [imported, setImported] = useState(0)
 
 
+    const wrapperSetImportedVariables = async (list) => {
+        console.log("M-am apelat " + list)
+        setVariables(list)
+    }
+
     const wrapperAddVariable = async (val) => {
         var list = variables
         list.push(val.name)
@@ -152,7 +157,7 @@ function Create(props) {
                         </Grid>
                     </Grid>
                     <Grid item xs={12}>
-                        <VariableChips val={val} delete={wrapperDeleteVariable} />
+                        <VariableChips setVariableList={wrapperSetImportedVariables} val={val} delete={wrapperDeleteVariable} import={props.import} imported={imported} idgen={id}/>
                     </Grid>
                     <Grid item xs={12}>
                         <Divider />
@@ -161,7 +166,7 @@ function Create(props) {
                         <Divider />
                     </Grid>
                     <Grid item container xs={12}>
-                        <Rules2 val={val} delete={toDelete} currentNode={currentNode} diagramId={id} />
+                        <Rules2 val={val} delete={toDelete} currentNode={currentNode} diagramId={id} imported={imported} import={props.import}/>
                     </Grid>
                 </Paper>
             </Grid>

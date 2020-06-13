@@ -224,7 +224,9 @@ class Diagram extends React.Component {
         diagram.addDiagramListener("TextEdited", this.textEdited)
         diagram.addDiagramListener("BackgroundSingleClicked", this.backgroundSingleClicked)
 
-        let model = $(go.GraphLinksModel)
+        let model = $(go.GraphLinksModel, {
+            linkKeyProperty: 'key'  // this should always be set when using a GraphLinksModel
+        })
         diagram.model = model
         return diagram
     }
