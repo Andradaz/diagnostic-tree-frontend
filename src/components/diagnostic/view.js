@@ -14,7 +14,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: "#282b2b"
+    backgroundColor: "#282b2b",
   },
   button: {
     textTransform: "none"
@@ -68,8 +68,6 @@ function View(props) {
     <Grid container>
       <Grid item xs={12}>
         <Box p={1}>
-          {/* <Card className={classes.card}>
-          <CardContent> */}
           <ExpansionPanel>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -91,9 +89,7 @@ function View(props) {
                     {name}
                   </Typography>
                 </Grid>
-
               </Grid>
-
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Typography variant="body2" component="p" style={{ whiteSpace: 'pre-line' }}>
@@ -101,8 +97,6 @@ function View(props) {
               </Typography>
             </ExpansionPanelDetails>
           </ExpansionPanel>
-          {/* </CardContent>
-        </Card> */}
         </Box>
       </Grid>
       <Grid item container xs={12}>
@@ -126,13 +120,10 @@ function View(props) {
                   size="small"
                 />
               ))}
-
             </form>
           </Box>
         </Grid>
       </Grid>
-
-
     </Grid >
   );
 }

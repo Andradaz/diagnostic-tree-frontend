@@ -37,8 +37,6 @@ function VariableChips(props) {
                 console.log("imported chips")
                 console.log(importedChips)
                 setChips(importedChips)
-                //props.setVariableList(importedChips)
-
             }
         }
         fetchData();

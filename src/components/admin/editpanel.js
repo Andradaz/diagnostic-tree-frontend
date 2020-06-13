@@ -11,6 +11,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import setStatus from '../../services/diagnostic/setStatus'
+import Box from '@material-ui/core/Box'
 
 const styles = theme => ({
     root: {
@@ -55,9 +56,11 @@ class EditPanel extends React.Component {
         const { classes } = this.props;
         return (
             <Container>
-                <Typography variant="h4" gutterBottom>
-                    Lista de diagrame
-            </Typography>
+                <Box pt={3}>
+                    <Typography variant="h4" gutterBottom>
+                        Lista de diagrame
+                </Typography>
+                </Box>
                 <div className={classes.root}>
                     {
                         this.state.list.map((obj, index) => {
@@ -77,10 +80,13 @@ class EditPanel extends React.Component {
                                                 </Grid>
                                                 <Grid item container xs={7} justify="flex-end">
                                                     <Grid item container xs={2} justify="center">
+                                                        <Button>Sterge</Button>
+                                                    </Grid>
+                                                    <Grid item container xs={2} justify="center">
                                                         <Button>Editeaza</Button>
                                                     </Grid>
                                                     <Grid item container xs={4} justify="center">
-                                                        <Button color="secondary" onClick={() =>this.onClickSetStatus(obj.idgen, 'false')}>Anuleaza Publicarea</Button>
+                                                        <Button color="secondary" onClick={() => this.onClickSetStatus(obj.idgen, 'false')}>Anuleaza Publicarea</Button>
                                                     </Grid>
                                                 </Grid>
                                             </Grid>
@@ -130,6 +136,6 @@ class EditPanel extends React.Component {
 
 EditPanel.propTypes = {
     classes: PropTypes.object.isRequired,
-  };
+};
 
 export default withStyles(styles)(EditPanel);

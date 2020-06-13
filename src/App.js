@@ -21,6 +21,7 @@ import SignUp from './components/login/signup'
 import { AuthProvider } from './Auth'
 import PrivateRoute from './privateRoute'
 import Import from './components/import/import'
+import Box from '@material-ui/core/Box'
 
 function NavBar(props) {
   const theme = useTheme();
@@ -58,6 +59,7 @@ class App extends React.Component {
               <NavBar list={this.state.list} />
             </Grid>
             <Grid item xs={12}>
+              <Box pt={6}>
               <Switch>
                 <Route path="/signin">
                   <SignIn />
@@ -81,6 +83,7 @@ class App extends React.Component {
                   <About />
                 </Route>
               </Switch>
+              </Box>
             </Grid>
           </Grid>
         </Router>

@@ -4,18 +4,29 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { Link as RouterLink } from 'react-router-dom'
+import Drawer from '@material-ui/core/Drawer'
+import Toolbar from '@material-ui/core/Toolbar'
+
 const Link1 = React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />);
 
 const useStyles = makeStyles(theme => ({
     root: {
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper,
-      position: 'relative',
+      display: 'flex',
     },
     buttonRipple: {
         color: '#ffffff'
-    }
+    },
+    drawer: {
+      width: 210,
+      flexShrink: 0,
+    },
+    drawerPaper: {
+      width: 210,
+      height: "100%"
+    },
+    drawerContainer: {
+      overflow: 'auto',
+    },
   }));
 
 
@@ -30,6 +41,15 @@ function Sidemenu(props) {
   
     return (
       <div className={classes.root}>
+        <Drawer
+        className={classes.drawer}
+        variant="permanent"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <Toolbar />
+        <div className={classes.drawerContainer}>
         <List component="nav">
             {props.list.map((obj, index) => {
               if(obj.published === true){
@@ -39,7 +59,6 @@ function Sidemenu(props) {
                   selected = {selectedIndex === index} 
                   onClick={event => handleListItemClick(event, index, obj.idgen)}
                   component={Link1} to={'/diagnostic/'+ obj.idgen}
-                  //TouchRippleProps={{classes: {root: classes.buttonRipple}}}
                   >
                   <ListItemText primary={obj.name} />
                   </ListItem>
@@ -49,6 +68,8 @@ function Sidemenu(props) {
             }
             )}
         </List>
+        </div>
+        </Drawer>
       </div>
     );
   }
