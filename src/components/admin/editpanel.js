@@ -18,6 +18,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle'
+import { Link as RouterLink } from 'react-router-dom'
+import Link from '@material-ui/core/Link'
 
 const styles = theme => ({
     root: {
@@ -62,12 +64,12 @@ class EditPanel extends React.Component {
     };
 
     onClickRemoveDiagnostic = async () => {
-        if(this.state.toDelete !== ""){
+        if (this.state.toDelete !== "") {
             let data = {
                 "idgen": this.state.toDelete
             }
             await removeDiagnostic(data)
-            this.setState({toDelete: ""})
+            this.setState({ toDelete: "" })
             this.setState({ open: false })
             window.location.reload(false)
         }
@@ -119,91 +121,96 @@ class EditPanel extends React.Component {
                                                         </Button>
                                                     </Grid>
                                                     <Grid item container xs={2} justify="center">
-                                                        <Button size="small" disabletypography='true'>
-                                                            <Typography variant="body2">
-                                                                Editează
+                                                        <Link
+                                                            to={'/admin/edit/' + obj.idgen} underline='none'
+                                                            component={RouterLink}
+                                                        >
+                                                            <Button size="small" disabletypography='true'>
+                                                                <Typography variant="body2">
+                                                                    Editează
                                                             </Typography>
-                                                        </Button>
+                                                            </Button>
+                                                        </Link>
                                                     </Grid>
-                                                    <Grid item container xs={4} justify="center">
-                                                        <Button color="secondary" disabletypography='true'
-                                                            onClick={() => this.onClickSetStatus(obj.idgen, 'false')}>
-                                                            <Typography variant="body2">Anulează publicarea</Typography>
-                                                        </Button>
+                                                        <Grid item container xs={4} justify="center">
+                                                            <Button color="secondary" disabletypography='true'
+                                                                onClick={() => this.onClickSetStatus(obj.idgen, 'false')}>
+                                                                <Typography variant="body2">Anulează publicarea</Typography>
+                                                            </Button>
+                                                        </Grid>
                                                     </Grid>
                                                 </Grid>
-                                            </Grid>
                                         </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
-                                            <Typography>{obj.description}</Typography>
-                                        </ExpansionPanelDetails>
+                                            <ExpansionPanelDetails>
+                                                <Typography>{obj.description}</Typography>
+                                            </ExpansionPanelDetails>
                                     </ExpansionPanel>
                                 )
                             } else {
                                 return (
-                                    <ExpansionPanel
-                                        key={obj._id}>
-                                        <ExpansionPanelSummary
-                                            expandIcon={<ExpandMoreIcon />}
-                                            aria-controls="panel1a-content"
-                                            id="panel1a-header"
-                                        >
-                                            <Grid container
-                                                alignItems="center">
-                                                <Grid item container xs={5}>
-                                                    <Typography className={classes.heading}>{obj.name}</Typography>
-                                                </Grid>
-                                                <Grid item container xs={7} justify="flex-end">
-                                                    <Grid item container xs={2} justify="center">
-                                                        <Button size="small" disabletypography='true' onClick={() => { this.handleClickOpen(obj.idgen, obj.name) }}>
-                                                            <Typography variant="body2">
-                                                                Șterge
+                                        <ExpansionPanel
+                                            key={obj._id}>
+                                            <ExpansionPanelSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel1a-content"
+                                                id="panel1a-header"
+                                            >
+                                                <Grid container
+                                                    alignItems="center">
+                                                    <Grid item container xs={5}>
+                                                        <Typography className={classes.heading}>{obj.name}</Typography>
+                                                    </Grid>
+                                                    <Grid item container xs={7} justify="flex-end">
+                                                        <Grid item container xs={2} justify="center">
+                                                            <Button size="small" disabletypography='true' onClick={() => { this.handleClickOpen(obj.idgen, obj.name) }}>
+                                                                <Typography variant="body2">
+                                                                    Șterge
                                                             </Typography>
-                                                        </Button>
-                                                    </Grid>
-                                                    <Grid item container xs={2} justify="center">
-                                                        <Button size="small" disabletypography='true'>
-                                                            <Typography variant="body2">Editează</Typography>
-                                                        </Button>
-                                                    </Grid>
-                                                    <Grid item container xs={4} justify="center">
-                                                        <Button size="small" disabletypography='true' variant='contained'
-                                                            color="primary" onClick={() => this.onClickSetStatus(obj.idgen, 'true')}>
-                                                            <Typography variant="body2">Publică</Typography>
-                                                        </Button>
+                                                            </Button>
+                                                        </Grid>
+                                                        <Grid item container xs={2} justify="center">
+                                                            <Button size="small" disabletypography='true'>
+                                                                <Typography variant="body2">Editează</Typography>
+                                                            </Button>
+                                                        </Grid>
+                                                        <Grid item container xs={4} justify="center">
+                                                            <Button size="small" disabletypography='true' variant='contained'
+                                                                color="primary" onClick={() => this.onClickSetStatus(obj.idgen, 'true')}>
+                                                                <Typography variant="body2">Publică</Typography>
+                                                            </Button>
+                                                        </Grid>
                                                     </Grid>
                                                 </Grid>
-                                            </Grid>
-                                        </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
-                                            <Typography>{obj.description}</Typography>
-                                        </ExpansionPanelDetails>
-                                    </ExpansionPanel>
+                                            </ExpansionPanelSummary>
+                                            <ExpansionPanelDetails>
+                                                <Typography>{obj.description}</Typography>
+                                            </ExpansionPanelDetails>
+                                        </ExpansionPanel>
                                 )
                             }
                         }
                         )}
-                    <Dialog
-                        open={this.state.open}
-                        onClose={this.handleClose}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title"> <Typography variant="h5">Ștergi diagrama <i>{this.state.toDeleteName}</i> ?</Typography></DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                Această diagramă nu poate fi recuperată ulterior.
+                                        <Dialog
+                                            open={this.state.open}
+                                            onClose={this.handleClose}
+                                            aria-labelledby="alert-dialog-title"
+                                            aria-describedby="alert-dialog-description"
+                                        >
+                                            <DialogTitle id="alert-dialog-title"> <Typography variant="h5">Ștergi diagrama <i>{this.state.toDeleteName}</i> ?</Typography></DialogTitle>
+                                            <DialogContent>
+                                                <DialogContentText id="alert-dialog-description">
+                                                    Această diagramă nu poate fi recuperată ulterior.
                             </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={this.handleClose}>
-                                Nu
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <Button onClick={this.handleClose}>
+                                                    Nu
                             </Button>
-                            <Button onClick={this.onClickRemoveDiagnostic} color="secondary" autoFocus>
-                                Da
+                                                <Button onClick={this.onClickRemoveDiagnostic} color="secondary" autoFocus>
+                                                    Da
                             </Button>
-                        </DialogActions>
-                    </Dialog>
+                                            </DialogActions>
+                                        </Dialog>
                 </div>
             </Container>
         );
@@ -211,7 +218,7 @@ class EditPanel extends React.Component {
 }
 
 EditPanel.propTypes = {
-    classes: PropTypes.object.isRequired,
+                    classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(EditPanel);

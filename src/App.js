@@ -23,6 +23,7 @@ import PrivateRoute from './privateRoute'
 import Import from './components/import/import'
 import Box from '@material-ui/core/Box'
 
+
 function NavBar(props) {
   const theme = useTheme();
   if (useMediaQuery(theme.breakpoints.up('md'))) {
@@ -60,29 +61,30 @@ class App extends React.Component {
             </Grid>
             <Grid item xs={12}>
               <Box pt={6}>
-              <Switch>
-                <Route path="/signin">
-                  <SignIn />
-                </Route>
-                <Route path="/signup">
-                  <SignUp />
-                </Route>
-                <Route path="/admin/create/:id" children={<Create import="no"/>} />
-                <Route path="/admin/edit">
-                  <EditPanel />
-                </Route>
+                <Switch>
+                  <Route path="/signin">
+                    <SignIn />
+                  </Route>
+                  <Route path="/signup">
+                    <SignUp />
+                  </Route>
+                  <Route path="/admin/create/:id" children={<Create import="no" />} />
                   <Route path="/admin/import/:id" children={<Import />} />
-                <PrivateRoute path="/admin" component={Admin}/>
-                <Route path="/diagnostic">
-                  <Diagnostic list={this.state.list} />
-                </Route>
-                <Route path="/about">
-                  <About />
-                </Route>
-                <Route path="/">
-                  <About />
-                </Route>
-              </Switch>
+                  <Route path="/admin/edit/:id" children={<Create import="no" edit="yes" />} />
+                  <Route path="/admin/edit">
+                    <EditPanel />
+                  </Route>
+                  <PrivateRoute path="/admin" component={Admin} />
+                  <Route path="/diagnostic">
+                    <Diagnostic list={this.state.list} />
+                  </Route>
+                  <Route path="/about">
+                    <About />
+                  </Route>
+                  <Route path="/">
+                    <About />
+                  </Route>
+                </Switch>
               </Box>
             </Grid>
           </Grid>

@@ -80,7 +80,6 @@ function Create(props) {
     const [currentNode, setCurrentNode] = useState(0)
     const [imported, setImported] = useState(0)
 
-
     const wrapperSetImportedVariables = async (list) => {
         console.log("M-am apelat " + list)
         setVariables(list)
@@ -131,10 +130,10 @@ function Create(props) {
 
         <Grid container>
             <Grid item xs={4}>
-                <DiagramText import={props.import} />
+                <DiagramText import={props.import} edit={props.edit} />
             </Grid>
             <Grid item container justify='center' xs={8}>
-                <DiagramName diagramId={id} />
+                <DiagramName diagramId={id} edit={props.edit} />
             </Grid>
             <Grid item xs={12}>
                 <Divider />
@@ -144,7 +143,7 @@ function Create(props) {
                 <Paper elevation={3}>
                     <Grid item container xs={12} alignItems='flex-start'>
                         <Grid item xs={12}>
-                            <DiagramDescription diagramId={id}/>
+                            <DiagramDescription diagramId={id} edit={props.edit}/>
                         </Grid>
                     </Grid>
                     <ImportButton import={props.import} idgen = {id} setImported={wrapperSetImported}/>
@@ -157,7 +156,13 @@ function Create(props) {
                         </Grid>
                     </Grid>
                     <Grid item xs={12}>
-                        <VariableChips setVariableList={wrapperSetImportedVariables} val={val} delete={wrapperDeleteVariable} import={props.import} imported={imported} idgen={id}/>
+                        <VariableChips setVariableList={wrapperSetImportedVariables}
+                                       val={val}
+                                       delete={wrapperDeleteVariable}
+                                       import={props.import}
+                                       imported={imported}
+                                       idgen={id}
+                                       edit={props.edit}/>
                     </Grid>
                     <Grid item xs={12}>
                         <Divider />
@@ -166,12 +171,22 @@ function Create(props) {
                         <Divider />
                     </Grid>
                     <Grid item container xs={12}>
-                        <Rules2 val={val} delete={toDelete} currentNode={currentNode} diagramId={id} imported={imported} import={props.import}/>
+                        <Rules2 val={val}
+                                delete={toDelete}
+                                currentNode={currentNode}
+                                diagramId={id}
+                                imported={imported}
+                                import={props.import}
+                                edit={props.edit}/>
                     </Grid>
                 </Paper>
             </Grid>
             <Grid item>
-                <Diagram setCurrentNode={wrapperSetCurrentNode} id={id} imported={imported} import={props.import}/>
+                <Diagram setCurrentNode={wrapperSetCurrentNode}
+                         id={id}
+                         imported={imported} 
+                         import={props.import}
+                         edit={props.edit}/>
             </Grid>
         </Grid>
     );

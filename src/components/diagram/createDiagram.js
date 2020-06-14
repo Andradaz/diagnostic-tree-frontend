@@ -19,7 +19,7 @@ class Diagram extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            nodeDataArray: [{ key: "N", color: '#c0cacf', name: "Nod1" }],
+            nodeDataArray: [{ key: "N", color: '#d3dfe6', name: "Nod1" }],
             linkDataArray: [],
             save: {},
             open: false,
@@ -40,14 +40,13 @@ class Diagram extends React.Component {
         let data = {
             "idgen": this.props.id
         }
-        console.log(this.props.id)
+
         this.setState({
             nodeDataArray: [],
             linkDataArray: []
         })
 
         let diagramModel = await getDiagramModel(data)
-        console.log(diagramModel)
 
         this.setState({
             nodeDataArray: diagramModel.data[0].nodeDataArray,
@@ -57,6 +56,10 @@ class Diagram extends React.Component {
 
     componentDidMount() {
         if(this.props.import === "yes" && this.props.imported > 0){
+            this.fetchData();
+        }
+
+        if(this.props.edit === "yes"){
             this.fetchData();
         }
     }
@@ -122,7 +125,7 @@ class Diagram extends React.Component {
         if ((nr < 2 && nr2 === 2) || (!parent && nr < 2)) {
             diagram.startTransaction("add node and link");
             // have the Model add the node data
-            let newnode = { key: "N", color: '#c0cacf' };
+            let newnode = { key: "N", color: '#d3dfe6' };
             diagram.model.addNodeData(newnode);
             // locate the node initially where the parent node is
             diagram.findNodeForData(newnode).location = node.location;

@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 import SetName from '../../services/diagnostic/setName'
+import GetName from '../../services/diagnostic/getName'
 
 const useStyles = makeStyles(theme => ({
     textField: {
@@ -20,25 +21,42 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const saveName = async (name, idgen) => {
-    let data = {
-        "name": name,
-        "idgen": idgen
-    }
-    await SetName(data)
-}
+
 
 function DiagramName(props) {
     const classes = useStyles()
     const [name, setName] = useState()
 
+    useEffect(() => {
+        async function fetchData() {
+            if (props.edit === "yes") {
+                let data = {
+                    "idgen": props.diagramId,
+                }
+                let result = await GetName(data)
+                setName(result.data.name)
+                console.log(result.data.name)
+            }
+        }
+        fetchData()
+    }, [props])
+
     const handleChange = (event) => {
         setName(event.target.value)
+    }
+
+    const saveName = async (name, idgen) => {
+        let data = {
+            "name": name,
+            "idgen": idgen
+        }
+        await SetName(data)
     }
 
     return (
         <form autoComplete='off'>
             <TextField
+                value={name || ''}
                 id='standard-secondary'
                 variant='outlined'
                 InputProps={{

@@ -149,13 +149,13 @@ function Admin() {
                   <CardContent>
                     <Typography component="h2" variant="h5">
                       Importă
-              </Typography>
+                    </Typography>
                     <Typography variant="subtitle1" color="textSecondary">
                       Weka output, J48
-              </Typography>
+                  </Typography>
                     <Typography variant="subtitle1" paragraph>
                       Încarcă un arbore de decizie creat cu ajutorul algoritmului J48, Weka.
-              </Typography>
+                    </Typography>
                   </CardContent>
                 </div>
                 <CardMedia className={classes.cardMedia} image={publish} title='titlu' />

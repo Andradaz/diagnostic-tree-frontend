@@ -4,11 +4,19 @@ import Box from '@material-ui/core/Box'
 
 
 function DiagramText(props) {
-    if (props.import === "no") {
+    if(props.import === "yes"){
         return (
             <Typography component='div'>
                 <Box fontWeight="fontWeightRegular" fontSize={25} pt={3} pl={3} pb={3}>
-                    Creează o nouă diagramă
+                    Importă o diagramă din Weka
+            </Box>
+            </Typography>
+        )
+    }else if(props.edit === "yes"){
+        return (
+            <Typography component='div'>
+                <Box fontWeight="fontWeightRegular" fontSize={25} pt={3} pl={3} pb={3}>
+                    Editează o diagramă
             </Box>
             </Typography>
         )
@@ -16,7 +24,7 @@ function DiagramText(props) {
         return (
             <Typography component='div'>
                 <Box fontWeight="fontWeightRegular" fontSize={25} pt={3} pl={3} pb={3}>
-                    Importă o diagramă din Weka
+                    Creează o nouă diagramă
             </Box>
             </Typography>
         )

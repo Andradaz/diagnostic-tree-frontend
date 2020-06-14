@@ -22,7 +22,7 @@ function VariableChips(props) {
 
     useEffect(() => {
         async function fetchData() {
-            if(props.import === "yes" && props.imported > 0){
+            if((props.import === "yes" && props.imported > 0) || props.edit === "yes"){
                 let data = {
                     "idgen": props.idgen
                 }

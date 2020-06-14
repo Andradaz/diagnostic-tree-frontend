@@ -6,6 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import { Link as RouterLink } from 'react-router-dom'
 import Drawer from '@material-ui/core/Drawer'
 import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
 
 const Link1 = React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />);
 
@@ -22,7 +23,8 @@ const useStyles = makeStyles(theme => ({
     },
     drawerPaper: {
       width: 210,
-      height: "100%"
+      height: "100%",
+      backgroundColor: "#e6f9ff"
     },
     drawerContainer: {
       overflow: 'auto',
@@ -60,7 +62,7 @@ function Sidemenu(props) {
                   onClick={event => handleListItemClick(event, index, obj.idgen)}
                   component={Link1} to={'/diagnostic/'+ obj.idgen}
                   >
-                  <ListItemText primary={obj.name} />
+                  <ListItemText primary={<Typography type="body2" style={{ color: '#00536b' }}>{obj.name}</Typography>} />
                   </ListItem>
                 )
               }

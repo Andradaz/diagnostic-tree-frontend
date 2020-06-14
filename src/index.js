@@ -10,8 +10,8 @@ const theme = createMuiTheme({
     palette: {
         primary: { main: '#78e1ff' },
         secondary: { main: '#24ceff' },
-        action: { selected: '#78e1ff',
-                   hover: '#c9f3ff'},
+        action: { selected: '#a8ecff',
+                   hover: '#9ad9ed'},
       },
       typography: { useNextVariants: true }
   });

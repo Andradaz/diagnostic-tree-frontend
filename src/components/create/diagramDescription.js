@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect} from 'react'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 import SetDescription from '../../services/diagnostic/setDescription'
 import Tooltip from '@material-ui/core/Tooltip'
+import GetDescription from '../../services/diagnostic/getDescription'
 
 const useStyles = makeStyles(theme => ({
     textField: {
@@ -18,6 +19,20 @@ function DiagramDescription(props) {
     const classes = useStyles()
     const [description, setDescription] = useState("")
 
+    useEffect(() => {
+        async function fetchData(){
+            if(props.edit === "yes"){
+                let data = {
+                    "idgen": props.diagramId,
+                }
+                let des = await GetDescription(data)
+                console.log(des)
+                setDescription(des.data.description)
+            }
+        }
+        fetchData()
+    },[props])
+
     const handleChange = (event) => {
         setDescription(event.target.value)
     }
@@ -29,12 +44,13 @@ function DiagramDescription(props) {
         }
         await SetDescription(data)
     }
-
+    
     const tooltipText = `Adaugă o descriere relevantă diagramei de diagnostic pe care o creezi.`
     return (
         <form autoComplete='off'>
             <Tooltip title={tooltipText} classes={{ tooltip: classes.customWidth }}>
             <TextField
+                value={description || ''}
                 id="outlined-textarea"
                 label="Descriere"
                 multiline

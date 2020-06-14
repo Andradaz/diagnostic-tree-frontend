@@ -68,7 +68,7 @@ function Rules(props) {
                 let rulesList = await GetRulesForNode(data)
                 setRulesList(rulesList.data)
             }
-            if(props.imported > 0 && props.import === "yes"){
+            if((props.imported > 0 && props.import === "yes")|| props.edit === "yes"){
                 let data = {
                     "idgen": props.diagramId
                 }

@@ -136,7 +136,7 @@ class Diagram extends React.Component {
                     <Grid item>
                         <Box p={1}>
                             <Button size="small" variant="contained" color="primary" disabletypography='true' onClick={this.compute}>
-                                <Typography>
+                                <Typography variant="body2">
                                     Calculează
                                 </Typography>
                             </Button>
