@@ -137,11 +137,13 @@ class Diagram extends React.Component {
             let model = JSON.parse(diagram.model.toJson())
             this.setState({
                 nodeDataArray: model.nodeDataArray,
+                linkDataArray: model.linkDataArray
             })
         } else {
             alert("Arborele trebuie să fie binar!")
         }
 
+        console.log("Diagrama" + diagram.model.toJson())
         this.setState({ save: diagram.model.toJson() })
     }
 

@@ -303,25 +303,6 @@ function Rules(props) {
                         </div>
                     </Box>
                 </Grid>
-                {/* <Grid item xs={12}>
-                    <Box pl={3} pt={3}>
-                        <Typography variant='body2'>
-                            Dacă nodul este unul terminal, selectează tipul său <br></br>(Eroare sau Soluție)
-                        </Typography>
-                    </Box>
-                </Grid> */}
-                {/* <Grid item xs={12}>
-                    <Box pl={3} pt={3}>
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend">Tipul nodului</FormLabel>
-                            <RadioGroup aria-label="type" name="type" value={type} onChange={handleRadioButtons}>
-                                <FormControlLabel value="mid" size = "small" control={<Radio size = "small"/>} label="Intermediar" />
-                                <FormControlLabel value="error" size = "small" control={<Radio size = "small"/>} label="Eroare" />
-                                <FormControlLabel value="solution" size = "small" control={<Radio size = "small"/>} label="Solutie" />
-                            </RadioGroup>
-                        </FormControl>
-                    </Box>
-                </Grid> */}
             </Grid>
         );
     } else {
@@ -331,7 +312,6 @@ function Rules(props) {
                     <Box p={9}>
                         Selectează un nod pentru a seta o regulă.
                     </Box>
-
                 </Grid>
             </Grid>
         )
