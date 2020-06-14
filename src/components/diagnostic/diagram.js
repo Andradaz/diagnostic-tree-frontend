@@ -54,7 +54,7 @@ class Diagram extends React.Component {
         return new Promise(resolve => {
             setTimeout(() => {
                 resolve('resolved');
-            }, 2000);
+            }, 1500);
         });
     }
 
@@ -65,15 +65,26 @@ class Diagram extends React.Component {
             "idgen": this.props.idgen,
             "inputs": this.props.inputs
         }
-        
+
         let result = await Compute(data)
 
+        console.log(result)
+        let animationMatrix = result.data.matrix
+        let linkMatrix = result.data.linkMatrix
 
-        let animationMatrix = result.data
-        for (let i = 0; i < animationMatrix.length; i++) {
+        this.setState({ ...this.state, linkDataArray: linkMatrix[0] })
+        this.setState({ ...this.state, nodeDataArray: animationMatrix[0] })
+
+        for (let i = 1; i < animationMatrix.length; i++) {
             let line = animationMatrix[i]
             this.setState({ ...this.state, nodeDataArray: line })
             await this.resolveAfter2Seconds();
+
+            if (i < animationMatrix.length - 1){
+                let linkLine = linkMatrix[i]
+                this.setState({ ...this.state, linkDataArray: linkLine })
+                await this.resolveAfter2Seconds();
+            }
 
         }
     }
@@ -124,7 +135,7 @@ class Diagram extends React.Component {
                 <Grid item container justify='flex-end' spacing={1}>
                     <Grid item>
                         <Box p={1}>
-                            <Button size ="small" variant="contained" color="primary" disabletypography='true' onClick={this.compute}>
+                            <Button size="small" variant="contained" color="primary" disabletypography='true' onClick={this.compute}>
                                 <Typography>
                                     Calculează
                                 </Typography>
