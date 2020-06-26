@@ -7,6 +7,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.48",
     "axios": "^0.19.2",
+    "fontsource-roboto": "^2.1.4",
     "gojs": "^2.1.12",
     "gojs-react": "^1.0.5",
     "material-ui": "^1.0.0-beta.47",
@@ -17,7 +18,8 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1",
     "typeface-roboto": "0.0.75",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "webfontloader": "^1.6.28"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -35,7 +35,6 @@ function DiagramName(props) {
                 }
                 let result = await GetName(data)
                 setName(result.data.name)
-                console.log(result.data.name)
             }
         }
         fetchData()

@@ -5,6 +5,13 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import 'typeface-roboto'
+import WebFont from 'webfontloader'
+
+WebFont.load({
+    google: {
+      families: ['Titillium Web:300,400,700']
+    }
+  });
 
 const theme = createMuiTheme({
     palette: {

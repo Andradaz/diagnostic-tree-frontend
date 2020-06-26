@@ -1,0 +1,39 @@
+.context{
+    height: 290px;
+    width: 400px;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+.context img {
+    margin: -10px 0px 0px -180px;
+}
+
+.trace{
+    height: 500px;
+    width: 200px;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+.admin{
+    height: 290px;
+    width: 400px;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+.decision{
+    height: 470px;
+    width: 400px;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+.textcolor {
+    color: #033c80;
+    font-size: 20px;
+    font-weight: 300;
+    font-family: 'Titillium Web';
+    padding-top: 20px;
+}

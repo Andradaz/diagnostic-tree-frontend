@@ -74,8 +74,6 @@ function Rules(props) {
                 }
 
                 let result = await getVariableList(data)
-                console.log("Result din rules")
-                console.log(result)
                 let  variables = []
                 result.data.forEach((obj)=>{
                     variables.push(obj.name)

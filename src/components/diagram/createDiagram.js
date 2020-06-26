@@ -66,8 +66,6 @@ class Diagram extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.imported !== prevProps.imported) {
-            console.log("imported")
-            console.log(this.props.imported)
             if(this.props.imported > 0){
                 this.fetchData();
             }
@@ -95,7 +93,7 @@ class Diagram extends React.Component {
         let linkIt = node.findLinksOutOf()
         let nr = 0;
 
-
+        //check brothers decision
         let BrotherDecision = false
         let myDecision = false
         while (linkIt.next()) {
@@ -133,7 +131,6 @@ class Diagram extends React.Component {
             let newlink = { from: node.data.key, to: newnode.key };
             diagram.model.addLinkData(newlink);
             let newlinkObject = diagram.findLinkForData(newlink)
-
             diagram.model.setDataProperty(newlinkObject.data, "text", myDecision)
             // finish the transaction -- will automatically perform a layout
             diagram.commitTransaction("add node and link");
@@ -146,7 +143,6 @@ class Diagram extends React.Component {
             alert("Arborele trebuie să fie binar!")
         }
 
-        console.log("Diagrama" + diagram.model.toJson())
         this.setState({ save: diagram.model.toJson() })
     }
 

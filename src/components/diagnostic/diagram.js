@@ -135,7 +135,11 @@ class Diagram extends React.Component {
                 <Grid item container justify='flex-end' spacing={1}>
                     <Grid item>
                         <Box p={1}>
-                            <Button size="small" variant="contained" color="primary" disabletypography='true' onClick={this.compute}>
+                            <Button size="small"
+                                    variant="contained"
+                                    color="primary"
+                                    disabletypography='true'
+                                    onClick={this.compute}>
                                 <Typography variant="body2">
                                     Calculează
                                 </Typography>

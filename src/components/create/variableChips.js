@@ -28,14 +28,10 @@ function VariableChips(props) {
                 }
 
                 let result = await getVariableList(data)
-                console.log("Result din variable list")
-                console.log(result)
                 let importedChips = []
                 result.data.forEach((obj)=>{
                     importedChips.push(obj.name)
                 })
-                console.log("imported chips")
-                console.log(importedChips)
                 setChips(importedChips)
             }
         }

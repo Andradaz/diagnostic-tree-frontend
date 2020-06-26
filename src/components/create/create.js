@@ -49,13 +49,11 @@ function ImportButton(props) {
                         reader.readAsText(files[0])
                         reader.onload = async () => {
                         const str = reader.result
-                        console.log(str)
                         let data = {
                             wekaOutput: str,
                             idgen: props.idgen
                         }
                         let result = await computeWekaOutput(data)
-                        console.log(result.data)
                         if(result.data.response==="Succesfully imported diagram in diagnostic."){
                             props.setImported("true")
                         }
@@ -81,7 +79,6 @@ function Create(props) {
     const [imported, setImported] = useState(0)
 
     const wrapperSetImportedVariables = async (list) => {
-        console.log("M-am apelat " + list)
         setVariables(list)
     }
 
@@ -114,10 +111,7 @@ function Create(props) {
     }
 
     const wrapperSetImported = val => {
-        console.log("val")
-        console.log(val)
         if(val === "true"){
-            console.log("am setat imported")
             setImported(imported + 1)
         }
     }

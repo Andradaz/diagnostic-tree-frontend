@@ -26,7 +26,6 @@ function DiagramDescription(props) {
                     "idgen": props.diagramId,
                 }
                 let des = await GetDescription(data)
-                console.log(des)
                 setDescription(des.data.description)
             }
         }

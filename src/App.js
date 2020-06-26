@@ -51,6 +51,7 @@ class App extends React.Component {
   componentDidMount() {
     this.fetchData();
   }
+  
   render() {
     return (
       <AuthProvider>
